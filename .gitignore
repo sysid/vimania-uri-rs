@@ -1,5 +1,6 @@
 pythonx/*
 !pythonx/README.md
+!pythonx/vimania_uri_
 #!pythonx/requirements.txt
 
 /target

@@ -27,6 +27,7 @@ managed = true
 dev-dependencies = [
     "maturin-import-hook>=0.1.0",
     "pip>=24.2",
+    "pytest>=8.3.2",
 ]
 
 [tool.hatch.metadata]

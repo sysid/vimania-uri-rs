@@ -1,0 +1,27 @@
+###################
+# Typical comment #
+###################
+
+Given (fixture):
+================
+  Hello
+
+Do (modification):
+------------------
+* change inner word
+  ciw
+* to
+  World
+
+Expect (result):
+~~~~~~~~~~~~~~~~
+  World
+
+
+Execute (delete bufer):
+  %d
+  Assert 1 == line('$')
+
+Execute (set filetype):
+  setf python
+  AssertEqual 'python', &filetype

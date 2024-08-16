@@ -1,0 +1,73 @@
+# vim: set ts=2 sw=2 tw=120 et :
+"----------------------------------- vimania -----------------------------------
+Before:
+  messages clear
+
+Given (test-buffer text):
+  yyy://$HOME/dev/vim/vim-textobj-uri/test/vimania//vimania.pdf
+
+#Execute(Should open marked2 viewer):
+#  Vimania $HOME/dev/vim/vimania-todos/tests/data/test.md 0
+#  "Vimania /Users/Q187392/dev/vim/vimania-todos/tests/data/test.md
+#Then ():
+#  Messages
+#  Cfilter Opening
+#  Log printf("Len of location list: %s", len(getqflist()))
+#  Assert len(getqflist()) == 1
+
+Given markdown:
+  https://www.google.com
+Do(add twbm: prereq: make sure www.google.com does not exist int twbm prod):
+  goo
+Then ():
+  Messages
+  Cfilter add_twbm
+  Log printf("Len of location list: %s", len(getqflist()))
+  Assert len(getqflist()) == 1
+
+# TODO: check DB for deletion
+Given markdown (should delete non existing entry in twbm):
+  wiht a [url](vm::http://www.vimania.tw) some more text
+Do (delete line):
+  dd
+Then ():
+  Log printf("Current Line: %s", getline('.'))
+  Assert 1 == line('$')
+  Assert "" == getline('.')
+Execute(twbm_delete):
+  VimaniaDeleteTwbm with [url](vm::http://www.vimania.tw) some more text
+Then ():
+  Messages
+  "Cfilter deleted
+  Cfilter not in DB
+  Log printf("Len of location list: %s", len(getqflist()))
+  Assert len(getqflist()) == 1
+
+Given markdown (with TOC anchors):
+  [Scond Heading](#second-heading)
+  wiht a [url](vm::http://www.vimania.tw) some more text
+  ## Second Heading
+Execute (jumpt to anchor):
+  HandleMd
+Then ():
+  Log printf("Current Line: %s", getline('.'))
+  Assert "## Second Heading" == getline('.')
+
+Given markdown (with reference style links):
+  [Reference Link][lk1]
+  wiht a [url](vm::http://www.vimania.tw) some more text
+  [lk1]: https://sysid.github.io/
+Execute (jumpt to anchor):
+  HandleMd
+Then (https://sysid.github.io/ opens in Browser Tab):
+  Messages
+  Cfilter browser
+  Log printf("Len of location list: %s", len(getqflist()))
+  Assert len(getqflist()) >= 1
+
+Execute(markdown edit with jump to heading1):
+  VimaniaEdit /Users/Q187392/dev/vim/vimania-uri/tests/data/test.md# Working Examples
+  "VimaniaEdit /Users/Q187392/dev/vim/vimania-todos/tests/data/test.md## Config
+Then ():
+  Log printf("Current Line: %s", getline('.'))
+  Assert "# Working Examples" == getline('.')
