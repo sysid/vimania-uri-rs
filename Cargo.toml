@@ -9,8 +9,33 @@ edition = "2021"
 # The name of the native library. This is the name which will be used in Python to import the
 # library (i.e. `import string_sum`). If you change this, you must also change the name of the
 # `#[pymodule]` in `src/lib.rs`.
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 name = "vimania_uri_rs"
+#crate-type = ["cdylib", "rlib"]
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.22.2", features = ["extension-module"] }
+anyhow = "1.0.86"
+camino = "1.1.8"
+ctor = "0.2.8"
+env_logger = "0.11.5"
+itertools = "0.13.0"
+log = "0.4.22"
+pyo3 = { git = "https://github.com/pyo3/pyo3", features = ["extension-module", "anyhow"] }
+reqwest = { version = "0.12.5", features = ["blocking", "rustls-tls"] }
+rstest = "0.22.0"
+scraper = "0.20.0"
+stdext = "0.3.3"
+
+# https://pyo3.rs/v0.7.0-alpha.1/advanced.html#testing
+# cargo test --no-default-features
+[features]
+extension-module = ["pyo3/extension-module"]
+default = ["extension-module"]
+
+[dev-dependencies]
+mockito = "1.5.0"
+
+[build-dependencies]
+pyo3-build-config = "0.22.2"
+
