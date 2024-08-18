@@ -28,6 +28,7 @@ dev-dependencies = [
     "maturin-import-hook>=0.1.0",
     "pip>=24.2",
     "pytest>=8.3.2",
+    "pytest-mock>=3.14.0",
 ]
 
 [tool.hatch.metadata]

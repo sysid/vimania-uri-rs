@@ -1,5 +1,6 @@
 import logging
 import traceback
+import vimania_uri_rs  # must be after logging setup
 from functools import wraps
 from pathlib import Path
 from pprint import pprint
@@ -165,20 +166,17 @@ class VimaniaUriManager:
         pattern is extracted via separator: '#'
         """
         m = URL_PATTERN.match(url)
-        _log.debug(f"bs4 builders: {bs4.builder.builder_registry.builders}")
         if m is None:
             _log.warning(f"Invalid URL: {url=}")
             vim.command(f"echom 'Invalid URL: {url=}'")
         assert isinstance(url, str), f"Error: input must be string, got {type(url)}."
         # _log.debug(f"{url=}")
         try:
-            title = bs4.BeautifulSoup(
-                requests.get(url).content, features="lxml"
-            ).title.text.strip()
+            title = vimania_uri_rs.get_url_title(url)
             # https://stackoverflow.com/a/27324622
             title = title.replace("'", "''")
             _log.debug(f"{title=}")
             vim.command(f"let g:vimania_url_title = '{str(title)}'")
-        except requests.exceptions.MissingSchema:
-            _log.warning(f"Invalid URL: {url=}")
+        except Exception as e:
+            _log.warning(f"Invalid URL: {url=}, {e=}")
             vim.command(f"echom 'Invalid URL: {url=}'")
