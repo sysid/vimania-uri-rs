@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use log::{debug, info, error, LevelFilter};
+use log::{debug, info, LevelFilter};
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use pyo3_log::{Caching, Logger};
@@ -68,11 +68,9 @@ fn _get_url_title(url: &str) -> Result<String> {
 fn vimania_uri_rs(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     // let handle = pyo3_log::init();
     // configure logger so that certain creates have diffrent log levels
-
-    let log_handle = Logger::new(py, Caching::LoggersAndLevels)?
+    let _ = Logger::new(py, Caching::LoggersAndLevels)?
         .filter(LevelFilter::Trace)
         // .filter_target("my_module::verbose_submodule".to_owned(), LevelFilter::Warn)
-        // .filter_target("vimania_uri_rs".to_owned(), LevelFilter::Debug) // Ensure your crate is set to debug
         .filter_target("html5ever".to_owned(), LevelFilter::Warn)
         .filter_target("selectors".to_owned(), LevelFilter::Warn)
         .filter_target("build_wheels".to_owned(), LevelFilter::Warn)
@@ -80,11 +78,7 @@ fn vimania_uri_rs(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
         .install()
         .expect("Someone installed a logger before us :-(");
 
-    // log::logger().flush();
-    println!("Log level: {}", log::max_level());
-
-    info!("xxxxxxxx Debug mode: info");
-    error!("xxxxxxx Debug mode: error");
+    info!("Log level: {}", log::max_level());
     m.add_function(wrap_pyfunction!(reverse_line, m)?)?;
     m.add_function(wrap_pyfunction!(get_url_title, m)?)?;
     Ok(())

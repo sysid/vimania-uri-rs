@@ -77,9 +77,10 @@ copy-buku:  ## copy-buku: copy buku.py from twbm
 
 .PHONY: build-vim
 build-vim: _confirm clean-vim ## clean and re-install via pip into pythonx
-	pip install -r pythonx/requirements.txt --target pythonx
-	cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs-0.1.0.dist-info pythonx/
-	cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs pythonx/
+	#pip install -r pythonx/requirements.txt --target pythonx
+	#cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs-0.1.0.dist-info pythonx/
+	#cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs pythonx/
+	python build.py --dev
 
 .PHONY: clean-vim
 clean-vim:  ## clean pythonx directory for PyCharm development
@@ -100,9 +101,10 @@ vim-install:  ## vim Plug install
 
 .PHONY: vim-uninstall
 vim-uninstall:  ## vim Plug uninstall
-	[ -d "$(HOME)/.vim/plugged/vimania-uri-rs" ] && rm -fr "$(HOME)/.vim/plugged/vimania-uri-rs"
+	-[ -d "$(HOME)/.vim/plugged/vimania-uri-rs" ] && rm -fr "$(HOME)/.vim/plugged/vimania-uri-rs"
 	sed -i.bkp "s#^\"Plug '~/dev/vim/vimania-uri-rs'#Plug '~/dev/vim/vimania-uri-rs'#" $(VIM_PLUG)
 	sed -i.bkp "s#^Plug 'https://github.com/sysid/vimania-uri-rs.git'#\"Plug 'https://github.com/sysid/vimania-uri-rs.git'#" $(VIM_PLUG)
+	#vim -c ':PlugClean vimania-uri-rs'
 
 .PHONY: upload
 upload:  ## upload to PyPi
