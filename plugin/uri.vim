@@ -6,6 +6,7 @@ let s:script_dir = fnamemodify(resolve(expand('<sfile>', ':p')), ':h')
 
 function! s:HandleMd(save_twbm)
   python3 xUriMgr.call_handle_md2(vim.eval('a:save_twbm'))
+  redraw!
 endfunction
 
 " opens the URI no saving action triggered

@@ -7,6 +7,7 @@ from pprint import pprint
 from typing import Dict, Tuple
 
 from vimania_uri_ import md
+from vimania_uri_.bms.handler import delete_twbm
 from vimania_uri_.exception import VimaniaException
 from vimania_uri_.pattern import URL_PATTERN
 from vimania_uri_.vim_ import vim_helper
@@ -74,11 +75,11 @@ def warn_to_scratch_buffer(func):
 
 class VimaniaUriManager:
     def __init__(
-        self,
-        *,
-        extensions=None,
-        twbm_integrated=False,
-        plugin_root_dir=None,
+            self,
+            *,
+            extensions=None,
+            twbm_integrated=False,
+            plugin_root_dir=None,
     ):
         self.extensions = extensions
         self.twbm_integrated = twbm_integrated
@@ -137,6 +138,25 @@ class VimaniaUriManager:
         # add line at end of buffer
         current.buffer[-1:0] = ["New line at end."]
 
+    # https://github.com/vim/vim/issues/6017: cannot create error buffer
+    # @err_to_scratch_buffer
+    # @warn_to_scratch_buffer
+    def delete_twbm(self, args: str):
+        """removes bookmark from twbm via 'dd' mapping"""
+        _log.debug(f"{args=}")
+        if not self.twbm_integrated:
+            _log.debug(f"twbm not integrated. Do nothing.")
+        assert isinstance(args, str), f"Error: input must be string, got {type(args)}."
+        try:
+            urls = delete_twbm(args)
+        except VimaniaException as e:
+            vim.command(
+                f"echohl WarningMsg | echom 'Cannot extract url from: {args}' | echohl None"
+            )
+            return
+        for url in urls:
+            vim.command(f"echom 'deleted twbm: {url[0]} {url[1]}'")
+
     @staticmethod
     @err_to_scratch_buffer
     def throw_error(args: str, path: str):
@@ -179,4 +199,5 @@ class VimaniaUriManager:
             vim.command(f"let g:vimania_url_title = '{str(title)}'")
         except Exception as e:
             _log.warning(f"Invalid URL: {url=}, {e=}")
-            vim.command(f"echom 'Invalid URL: {url=}'")
+            vim.command(f"let g:vimania_url_title = 'UNKNOWN_URL_TITLE'")
+            # vim.command(f"echom 'Invalid URL: {url=}'")

@@ -10,6 +10,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, NewType, Optional, Tuple
 
+from vimania_uri_.bms.handler import add_twbm
 from vimania_uri_.environment import config
 from vimania_uri_.exception import VimaniaException
 from vimania_uri_.pattern import URL_PATTERN, MD_LINK_PATTERN, LINK_PATTERN, REFERENCE_DEFINITION_PATTERN
@@ -99,16 +100,16 @@ def open_uri(
     if twbm_integrated and save_twbm:
         if not config.is_installed_twbm:
             _log.error(
-                f"Environment variable TWBM_DB_URL not set. Required for twbm integration"
+                f"Environment variable BKMR_DB_URL not set. Required for twbm integration"
             )
             # return lambda: None
             raise VimaniaException(
                 f"Environment variable TWBM_DB_URL not set. Required for twbm integration"
             )
-        id_ = add_twbm(str(target))
-        if id_ != -1:
-            return_message = f"new added twbm url: {id_=}"
-            _log.info(f"twbm added: {id_}")
+        retcode = add_twbm(str(target))
+        if retcode == 0:
+            return_message = f"new added twbm url: {retcode=}"
+            _log.info(f"twbm added: {retcode}")
 
     if has_scheme(target):
         _log.debug(f"has scheme -> open in browser: {target=}")

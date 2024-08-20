@@ -4,8 +4,8 @@
 
 Background: https://sysid.github.io/vimania-uri/
 
-This is a re-implementation of [vimania-uri](https://github.com/sysid/vimania-uri)
-in Rust for performance.
+This Rust re-implementation of [vimania-uri](https://github.com/sysid/vimania-uri)
+shows 10x faster VIM startup time.
 
 # Key Features
 1. Open URIs, html, docx, pptx, jpg, png, mp3, ...
@@ -113,14 +113,14 @@ The behavior can be configured via the following options:
 ## Installation
 Using [vim-plug](https://github.com/junegunn/vim-plug):
 ```vim
-Plug 'https://github.com/sysid/vimania-uri.git', {'do': 'pip install -r pythonx/requirements.txt --target pythonx'}
+"Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'python3 build.py', 'branch': 'main'}
   let g:vimania_uri_extensions=['.md','.txt','.rst','.py']
   let g:vimania_uri_twbm_integration=1  # if twbm is installed
 ```
+- `rust, maturin` must be installed (on PATH) to build the plugin
 - vim needs to be configured with python support
-- `pip` must be in path in order to install required dependencies into `vimania/pythonx` (no pollution of system python).
-- dependencies see [requirements.txt](requirements.txt)
-- tested only on Linux/MacOS
+- `pip` must be in path to install required dependencies into `vimania/pythonx` (no pollution of system python).
+- tested on Linux/MacOS
 
 
 #### Shortcut to create URI

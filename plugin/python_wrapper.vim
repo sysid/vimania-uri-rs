@@ -59,7 +59,14 @@ command! -nargs=0 VimaniaThrowError call VimaniaThrowError()
 
 function! VimaniaDeleteTwbm(args)
   call TwDebug(printf("Vimania args: %s", a:args))
-  python3 xUriMgr.delete_twbm(vim.eval('a:args'))
+  " Prompt the user for confirmation
+  let l:confirmation = input("Delete also from bkmr database? (y/n): ")
+  if l:confirmation ==? 'y'
+    python3 xUriMgr.delete_twbm(vim.eval('a:args'))
+    echo "Bookmark deleted."
+  else
+    echo "Deletion canceled."
+  endif
 endfunction
 command! -nargs=1 VimaniaDeleteTwbm call VimaniaDeleteTwbm(<f-args>)
 "noremap Q :VimaniaDeleteTodo - [ ] todo vimania<CR>
