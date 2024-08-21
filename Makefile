@@ -1,5 +1,8 @@
 .DEFAULT_GOAL := help
 
+SOURCEDIR     = source
+BUILDDIR      = build
+MAKE          = make
 VERSION       = $(shell cat VERSION)
 
 PYTEST	= pytest --log-level=debug --capture=tee-sys --asyncio-mode=auto
@@ -54,27 +57,9 @@ test-vim-uri: build-vim  ## run tests-vim-vimania (requires libs in pythonx: mak
 	pushd tests; ./run_test.sh test_vimania_uri_rs.vader; popd
 	@echo "- < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < "
 
-.PHONY: coverage
-coverage:  ## Run tests with coverage
-	python -m coverage erase
-	python -m coverage run --include=$(pkg_src)/* --omit=$(pkg_src)/buku.py -m pytest -ra
-	#python -m coverage report -m
-	python -m coverage html
-	python -m coverage report -m
-	python -m coverage xml
-	#open htmlcov/index.html  # work on macOS
-
-.PHONY: tox
-tox:   ## Run tox
-	tox
-
 ################################################################################
 # Building, Uploading \
 BUILDING:  ## #################################################################
-.PHONY: copy-buku
-copy-buku:  ## copy-buku: copy buku.py from twbm
-	cp $(HOME)/dev/py/twbm/twbm/buku.py $(pkg_src)/buku.py
-
 .PHONY: build-vim
 build-vim: _confirm clean-vim ## clean and re-install via pip into pythonx
 	#pip install -r pythonx/requirements.txt --target pythonx
@@ -86,7 +71,6 @@ build-vim: _confirm clean-vim ## clean and re-install via pip into pythonx
 clean-vim:  ## clean pythonx directory for PyCharm development
 	@echo "Removing python packages from pythonx"
 	@pushd pythonx; git clean -d -x -f; popd
-
 
 .PHONY: requirements
 requirements:  ## create requirements.txt
@@ -113,44 +97,62 @@ upload:  ## upload to PyPi
 
 .PHONY: bump-major
 bump-major:  ## bump-major, tag and push
-	bumpversion --commit --tag major
+	bump-my-version bump --commit --tag major
+	git push
 	git push --tags
+	@$(MAKE) create-release
 
 .PHONY: bump-minor
 bump-minor:  ## bump-minor, tag and push
-	bumpversion --commit --tag minor
+	bump-my-version bump --commit --tag minor
+	git push
 	git push --tags
+	@$(MAKE) create-release
 
 .PHONY: bump-patch
 bump-patch:  ## bump-patch, tag and push
-	bumpversion --commit --tag patch
+	bump-my-version bump --commit --tag patch
+	git push
 	git push --tags
+	@$(MAKE) create-release
+
+.PHONY: create-release
+create-release:  ## create a release on GitHub via the gh cli
+	@if command -v gh version &>/dev/null; then \
+		echo "Creating GitHub release for v$(VERSION)"; \
+		gh release create "v$(VERSION)" --generate-notes; \
+	else \
+		echo "You do not have the github-cli installed. Please create release from the repo manually."; \
+		exit 1; \
+	fi
 
 ################################################################################
 # Quality \
 QUALITY:  ## ##################################################################
-.PHONY: style
-style: isort format  ## perform code style format (black, isort)
 
 .PHONY: format
-format:  ## perform black formatting
-	black --exclude="buku.py" $(pkg_src) tests
+format:  ## perform ruff formatting
+	@ruff format $(pkg_src) $(tests_src)
 
-.PHONY: isort
-isort:  ## apply import sort ordering
-	isort $(pkg_src) --profile black
+.PHONY: format-check
+format-check:  ## perform ruff formatting
+	@ruff format --check $(pkg_src) $(tests_src)
+
+.PHONY: sort-imports
+sort-imports:  ## apply import sort ordering
+	isort $(pkg_src) $(tests_src) --profile black
+
+.PHONY: style
+style: sort-imports format  ## perform code style format (black, isort)
 
 .PHONY: lint
-lint: flake8 mypy ## lint code with all static code checks
-
-.PHONY: flake8
-flake8:  ## check style with flake8
-	@flake8 $(pkg_src)
+lint:  ## check style with ruff
+	ruff check $(pkg_src) $(tests_src)
 
 .PHONY: mypy
 mypy:  ## check type hint annotations
-	# keep config in setup.cfg for integration with PyCharm
-	mypy --config-file setup.cfg $(pkg_src)
+	@mypy --config-file pyproject.toml --install-types --non-interactive $(pkg_src)
+
 
 ################################################################################
 # Clean \

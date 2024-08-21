@@ -50,9 +50,9 @@ filetype plugin indent on
 syntax enable
 
 " TWBM INTEGRATION:
-let g:vimania_uri__twbm_integration=1
+let g:vimania_uri_twbm_integration=1
 " URI extensions
-let g:vimania_uri__extensions=['.md', '.txt', '.py']
+let g:vimania_uri_extensions=['.md', '.txt', '.py']
 
 let g:twvim_debug = 1
 let g:os = 'Darwin'

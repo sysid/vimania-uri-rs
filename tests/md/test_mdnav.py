@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 
 import pytest
-
 from vimania_uri_.environment import ROOT_DIR
 from vimania_uri_.md import mdnav
 from vimania_uri_.md.mdnav import URI
@@ -12,7 +11,7 @@ def _find_cursor(lines):
     lines_without_cursor = []
     cursor = None
 
-    for (row, line) in enumerate(lines):
+    for row, line in enumerate(lines):
         pos = line.find("^")
 
         if pos < 0:
@@ -20,7 +19,7 @@ def _find_cursor(lines):
 
         else:
             cursor = (row, pos)
-            lines_without_cursor.append(line[:pos] + line[pos + 1:])
+            lines_without_cursor.append(line[:pos] + line[pos + 1 :])
 
     return cursor, lines_without_cursor
 
@@ -36,8 +35,14 @@ class TestParseLine:
         (["foo [b^ar](baz.md) [bar](bar.md)"], "baz.md"),
         (["foo [b^ar][bar]", "[bar]: baz.md"], "baz.md"),
         (["foo [b^ar][bar]", "[bar]: |filename|./baz.md"], "|filename|./baz.md"),
-        (["foo [b^ar][bar] [bar][baz]", "[bar]: |filename|./baz.md"], "|filename|./baz.md"),
-        (["foo [b^ar][bar] [bar][baz]", "[bar]: {filename}./baz.md"], "{filename}./baz.md"),
+        (
+            ["foo [b^ar][bar] [bar][baz]", "[bar]: |filename|./baz.md"],
+            "|filename|./baz.md",
+        ),
+        (
+            ["foo [b^ar][bar] [bar][baz]", "[bar]: {filename}./baz.md"],
+            "{filename}./baz.md",
+        ),
         # # empty link target
         (["foo [b^ar][]", "[bar]: baz.md"], "baz.md"),
         (["foo [@b^ar][]", "[@bar]: baz.md"], "baz.md"),
@@ -57,9 +62,18 @@ class TestParseLine:
         # empty line
         (["^"], None),
         # multiple [] pairs across multiple lines (reference style links)
-        (["- [ ] checkout [la^bel][target] abs", "[target]: example.com"], "example.com"),
-        (["- [ ] checkout [label]^[target] abs", "[target]: example.com"], "example.com"),
-        (["- [ ] checkout [label][tar^get] abs", "[target]: example.com"], "example.com"),
+        (
+            ["- [ ] checkout [la^bel][target] abs", "[target]: example.com"],
+            "example.com",
+        ),
+        (
+            ["- [ ] checkout [label]^[target] abs", "[target]: example.com"],
+            "example.com",
+        ),
+        (
+            ["- [ ] checkout [label][tar^get] abs", "[target]: example.com"],
+            "example.com",
+        ),
         # reference definitions
         (["[f^oo]: test.md"], "test.md"),
         (["[foo]: test.md^"], "test.md"),
@@ -94,8 +108,7 @@ class TestParseLine:
             ("foo^  [bar](baz.md) ", None),
             # invalid path
             ("^$HOME/xxx|blub", None),
-
-        )
+        ),
     )
     def test_check_path(self, line, expected):
         cursor, mod_lines = _find_cursor([line])
@@ -110,14 +123,17 @@ class TestParseLine:
             ("^http://yyy/xxx", "http://yyy/xxx"),
             ("http://yyy/xxx^", None),
             ("htt://yyy/^xxx", None),
-            ("Google: https://^www.google.com and here to Wikipedia: https://en.wikipedia.org",
-             "https://www.google.com"),
-            ("Google: https://www.google.com and here to Wikipedia: http://en.wikipedia.or^g",
-             "http://en.wikipedia.org"),
+            (
+                "Google: https://^www.google.com and here to Wikipedia: https://en.wikipedia.org",
+                "https://www.google.com",
+            ),
+            (
+                "Google: https://www.google.com and here to Wikipedia: http://en.wikipedia.or^g",
+                "http://en.wikipedia.org",
+            ),
             (" ^https://www.google.com/?q=xxx  xxxx", "https://www.google.com/?q=xxx"),
-
             ("[xx](http://^yyy/xxx)", None),  # do not match markdown links
-        )
+        ),
     )
     def test_check_url(self, line, expected):
         cursor, mod_lines = _find_cursor([line])
@@ -127,10 +143,7 @@ class TestParseLine:
         assert link_text == expected
 
     @pytest.mark.parametrize(
-        ("line", "expected"),
-        (
-            ("^[xxx](http://yyy/xxx)", "http://yyy/xxx"),
-        )
+        ("line", "expected"), (("^[xxx](http://yyy/xxx)", "http://yyy/xxx"),)
     )
     def test_check_md(self, line, expected):
         cursor, mod_lines = _find_cursor([line])

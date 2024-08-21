@@ -16,7 +16,7 @@ def mock_vim(mocker):
     mock_vim.current.window.cursor = (1, 1)
     mock_vim.current.buffer = ["https://www.google.com"]
     mock_vim.eval.return_value = "my_file.md"
-    mocker.patch.dict('sys.modules', {'vim': mock_vim})
+    mocker.patch.dict("sys.modules", {"vim": mock_vim})
     return mock_vim
 
 
@@ -25,11 +25,16 @@ class TestVimaniaUriManager:
     @pytest.mark.skip(reason="not applicable currently")
     def test_twbm(self, mocker, mock_vim):
         import vimania_uri_.vim_.vimania_manager as module_under_test
+
         # noinspection PyUnresolvedReferences
         assert module_under_test.vim == mock_vim
 
-        mocked_add_twbm = mocker.patch("vimania_uri_.vim_.vimania_manager.add_twbm", return_value=9999)
-        mocked_open_uri = mocker.patch("vimania_uri_.vim_.vimania_manager.md", autospec=True)
+        mocked_add_twbm = mocker.patch(
+            "vimania_uri_.vim_.vimania_manager.add_twbm", return_value=9999
+        )
+        mocked_open_uri = mocker.patch(
+            "vimania_uri_.vim_.vimania_manager.md", autospec=True
+        )
 
         vm = module_under_test.VimaniaUriManager(
             extensions=["vimwiki", "markdown", "pdf", "png", "jpg", "jpeg", "gif"],
@@ -43,11 +48,16 @@ class TestVimaniaUriManager:
     @pytest.mark.skip(reason="not applicable currently")
     def test_twbm_not_configured(self, mocker, mock_vim):
         import vimania_uri_.vim_.vimania_manager as module_under_test
+
         # noinspection PyUnresolvedReferences
         assert module_under_test.vim == mock_vim
 
-        mocked_add_twbm = mocker.patch("vimania_uri_.vim_.vimania_manager.add_twbm", return_value=9999)
-        mocked_open_uri = mocker.patch("vimania_uri_.vim_.vimania_manager.md", autospec=True)
+        mocked_add_twbm = mocker.patch(
+            "vimania_uri_.vim_.vimania_manager.add_twbm", return_value=9999
+        )
+        mocked_open_uri = mocker.patch(
+            "vimania_uri_.vim_.vimania_manager.md", autospec=True
+        )
 
         vm = module_under_test.VimaniaUriManager(
             extensions=["vimwiki", "markdown", "pdf", "png", "jpg", "jpeg", "gif"],
@@ -62,6 +72,7 @@ class TestVimaniaUriManager:
         caplog.set_level(logging.DEBUG)
 
         import vimania_uri_.vim_.vimania_manager as module_under_test
+
         # noinspection PyUnresolvedReferences
         assert module_under_test.vim == mock_vim
 
@@ -86,7 +97,9 @@ class TestVimaniaUriManager:
 )
 def test_split_path(args, path, suffix):
     from vimania_uri_.vim_.vimania_manager import split_path
+
     assert split_path(args) == (path, suffix)
+
 
 # def test_clean_url_tilte():
 #     title = r"Improve Your Code's Maintainability"
