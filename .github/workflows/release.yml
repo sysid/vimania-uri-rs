@@ -37,18 +37,23 @@ jobs:
       - name: Upload wheel
         uses: actions/upload-artifact@v4
         with:
-          name: wheel
+          name: wheel-${{ matrix.os }}-${{ matrix.python-version }}-${{ matrix.architecture }}
+#          name: wheel
           path: ./target/wheels/*.whl
 
   publish:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download wheel artifact
+      - name: Download wheel artifacts
         uses: actions/download-artifact@v4
         with:
-          name: wheel  # Download the wheel artifact
-          path: ./target/wheels  # Specify the directory where the wheels should be downloaded
+#          pattern: *
+          path: ./target/wheels
+          merge-multiple: true
+
+      - name: Display structure of downloaded files
+        run: ls -R ./target/wheels
 
       - name: Install dependencies
         run: pip install twine
