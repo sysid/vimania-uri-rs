@@ -30,8 +30,8 @@ if not _log.handlers:  # avoid adding multiple handler via re-sourcing
         )
     )
     _log.addHandler(handler)
+    _log.setLevel(LOG_LEVEL)
 
-_log.setLevel(LOG_LEVEL)
 _log.debug("Starting Python")
 
 # GOTCHA: activates other venvs as well

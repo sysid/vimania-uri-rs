@@ -2,6 +2,9 @@
 # encoding: utf-8
 
 """Wrapper functionality around the functions we need from Vim."""
+import logging
+
+log = logging.getLogger("vimania-uri_.vim_.vim_helper")
 
 from contextlib import contextmanager
 

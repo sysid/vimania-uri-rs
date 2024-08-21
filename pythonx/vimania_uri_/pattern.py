@@ -1,7 +1,10 @@
 # https://regex101.com/
 from __future__ import print_function
 
+import logging
 import re
+
+log = logging.getLogger("vimania-uri_.pattern")
 
 ################################################################################
 # URL

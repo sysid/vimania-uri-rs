@@ -21,9 +21,10 @@ except ImportError:
     # noinspection PyUnresolvedReferences
     from urlparse import urlparse
 
-_log = logging.getLogger("vimania-uri.md.mdnav")
+_log = logging.getLogger("vimania-uri_.md.mdnav")
 
 URI = NewType("URI", str)
+
 
 @dataclass
 class ParsedPath(object):
@@ -75,10 +76,11 @@ def parse_uri(uri: URI) -> ParsedPath:
 
 
 def open_uri(
-    target: URI,
-    open_in_vim_extensions: set = None,
-    save_twbm=False,
-    twbm_integrated=False,
+        target: URI,
+        open_in_vim_extensions: set = None,
+        save_twbm=False,
+        twbm_integrated=False,
+        current_file: str | None = None,
 ) -> Callable:
     """
     :returns: a callable that encapsulates the action to perform
@@ -106,7 +108,7 @@ def open_uri(
             raise VimaniaException(
                 f"Environment variable TWBM_DB_URL not set. Required for twbm integration"
             )
-        retcode = add_twbm(str(target))
+        retcode = add_twbm(str(target), current_file)
         if retcode == 0:
             return_message = f"new added twbm url: {retcode=}"
             _log.info(f"twbm added: {retcode}")
@@ -412,8 +414,6 @@ def parse_line(cursor, lines) -> URI | None:
 
     _log.info("could not match for indirect link")
     return None
-
-
 
 
 def select_from_start_of_link(line, pos) -> Tuple[str | None, int]:

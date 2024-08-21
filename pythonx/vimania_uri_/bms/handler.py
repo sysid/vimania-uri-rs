@@ -5,24 +5,23 @@ from typing import Tuple, Sequence
 
 from vimania_uri_.pattern import URL_PATTERN
 
-log = logging.getLogger("vimania-uri-rs.bms")
+log = logging.getLogger("vimania-uri_.bms")
 
 
-def add_twbm(url: str) -> int:
+def add_twbm(url: str, current_file: str | None) -> int:
     """ Adds a bookmark using the bkmr CLI tool and allows interactive editing with vim. """
     try:
-        log.info(f"Adding bookmark with interactive editing: {url}")
+        log.info(f"Adding bookmark: {url=}, {current_file=}")
+        # TODO: description should be taken from page
         result = process = subprocess.Popen(
-            ["bkmr", "add", url, "--edit", ],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
+            # ["bkmr", "add", url, "-d", current_file, "_md_", "--edit"],
+            ["bkmr", "add", url, "_md_", "--edit"],
+            # GOTCHA: deadlock?
+            # stdout=subprocess.PIPE,
+            # stderr=subprocess.PIPE,
+            # text=True,
         )
-        stdout, stderr = process.communicate()  # Wait for the process to complete, allowing interaction
-        if stdout:
-            log.info(f"{stdout.strip()}")
-        if stderr:
-            log.info(f"{stderr.strip()}")
+        process.communicate()  # Wait for the process to complete, allowing interaction
         if process.returncode == 0:
             log.info("Bookmark added successfully.")
         else:

@@ -10,7 +10,7 @@ TEST_URL = "https://sysid.github.io/vimania-uri/"
 
 # @pytest.mark.skip(reason="manual test")
 def test_add_twbm():
-    result_code = add_twbm(TEST_URL)
+    result_code = add_twbm(TEST_URL, "x.md")
     assert result_code == 0, "Failed to add the bookmark"
 
 

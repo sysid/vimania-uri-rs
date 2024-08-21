@@ -3,6 +3,9 @@
 
 """This file contains compatibility code to stay compatible with as many python
 versions as possible."""
+import logging
+
+log = logging.getLogger("vimania-uri_.compatibility")
 
 try:
     # import vim  # relevant for debugging, but gives error when run with main

@@ -14,7 +14,8 @@ from vimania_uri_.vim_ import vim_helper
 
 """ Python VIM Interface Wrapper """
 
-_log = logging.getLogger("vimania-uri.vimania_manager")
+_log = logging.getLogger("vimania-uri_.vimania_manager")
+_log.propagate = True  # Ensure logs propagate to root logger
 ROOT_DIR = Path(__file__).parent.absolute()
 
 try:
@@ -115,15 +116,19 @@ class VimaniaUriManager:
         cursor = (row - 1, col)
         lines = vim.current.buffer
 
-        current_file = (vim.eval("expand('%:p')"),)
+        current_file = Path(vim.eval("expand('%:p')"))
+        home_dir = Path.home()
+        current_file = current_file.relative_to(home_dir)
+
         target = md.parse_line(cursor, lines)
-        _log.debug(f"open {target=} from {current_file=}")
+        _log.warning(f"open {target=} from {current_file=}")
 
         action = md.open_uri(
             target,
             open_in_vim_extensions=self.extensions,
             save_twbm=False if int(save_twbm) == 0 else True,
             twbm_integrated=self.twbm_integrated,
+            current_file=current_file,
         )
         action()
         if return_message != "":

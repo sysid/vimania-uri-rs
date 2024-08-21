@@ -90,7 +90,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test__get_url_title() {
+    fn test_get_url_title() {
         let url = "https://www.rust-lang.org/";
         let title = _get_url_title(url).unwrap();
         assert_eq!(title, "Rust Programming Language");

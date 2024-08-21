@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from typing import Optional
 
-_log = logging.getLogger("vimania-plugin.environment")
+_log = logging.getLogger("vimania-plugin_.environment")
 ROOT_DIR = Path(__file__).parent.absolute()
 
 

@@ -5,7 +5,7 @@ from typing import Tuple
 
 from vimania_uri_.exception import VimaniaException
 
-_log = logging.getLogger(__name__)
+_log = logging.getLogger("vimania-uri_.helper.get_fqp")
 
 
 def get_fqp(args: str) -> Tuple[str, str]:

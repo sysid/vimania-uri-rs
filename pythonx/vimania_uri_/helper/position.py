@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # encoding: utf-8
-
+import logging
 from enum import Enum
 
+log = logging.getLogger("vimania-uri_.helper.position")
 
 class JumpDirection(Enum):
     FORWARD = 1
