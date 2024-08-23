@@ -1,3 +1,4 @@
+.idea/runConfigurations/_template__of_py_test*
 pythonx/*
 !pythonx/README.md
 !pythonx/vimania_uri_
