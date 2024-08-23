@@ -39,3 +39,23 @@ allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["py"]
+
+[tool.bumpversion]
+current_version = "0.1.0"
+commit = true
+tag = false
+message = "Bump version to {new_version}"
+
+[tool.bumpversion.file_patterns]
+"VERSION" = [
+    {search = "{current_version}", replace = "{new_version}"},
+]
+"pyproject.toml" = [
+    {search = "version = {current_version}", replace = "version = {new_version}"},
+]
+
+[[tool.bumpversion.files]]
+filename = "VERSION"
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
