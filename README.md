@@ -1,8 +1,10 @@
 # Advanced URI Handling for the Modern Vim User
 
-> Intuitive, Fast, and Powerful
+[![Downloads](https://static.pepy.tech/badge/vimania-uri-rs/month)](https://pepy.tech/project/vimania-uri-rs)
+[![PyPI Version][pypi-image]][pypi-url]
+[![Build Status][build-image]][build-url]
 
-Background: https://sysid.github.io/vimania-uri-rs/
+> Background: [Rewriting a Vim Plugin in Rust](https://sysid.github.io/rewriting-a-vim-plugin-in-rust-vimania-uri-rs/)
 
 This Rust re-implementation of VIM plugin [vimania-uri](https://github.com/sysid/vimania-uri)
 with 10x faster VIM startup time and [bkmr](https://github.com/sysid/bkmr) integration.
@@ -19,7 +21,9 @@ Vim's native `gx` is effective but limited.
 Same is true for other plugins I am aware of. 
 I wanted more powerful URI handling in my markdown files.
 
-![demo](vimania-uri-demo.png)
+![demo](vimania-uri-rs-demo.png)
+
+[vimania-uri-rs demo - YouTube](https://www.youtube.com/watch?v=JLaN6cIAIY8)
 
 ## User Interface
 
@@ -63,32 +67,28 @@ I wanted more powerful URI handling in my markdown files.
 
 #### Usage
 
-In normal model within a Markdown document, press `go` on a markdown-link to open it.
+In VIM normal mode in a Markdown document, type `go` while curser is on markdown-link.
 If the link is a local file it will be opened in vim (`C-o` will get you back).
-Otherwise, it will be opened via OS (.e.g Web-Broser, Microsoft Office, ...).
+Otherwise, it will be opened via OS `open` command (.e.g Web-Broser, Microsoft Office, ...).
 
-The following links can be used (the possible cursor positions are indicated by `^`):
+The following links will be handled (the possible cursor positions are indicated by `^`):
+
+    Local text links: [link](foo.md) will be opened inside vim. 
+                      ^^^^^^^^^^^^^^
+    If target contains line number as in [link](foo.md:30), the line will be jumped to. 
+    Also anchors are supported, for example [link](foo.md#anchor)
 
     This [link](https://example.com) will be opened inside the browser.
          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-    This [link](./foo.md) will open `./foo.md` inside vim.
-         ^^^^^^^^^^^^^^^^
-
-    This [link](|filename|./foo.md) will open `./foo.md` inside vim.
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-    This $HOME/dir will be opened inside file browser
+    This $HOME/dir will be opened inside OS file browser
          ^^^^^^^^^
 
     This $HOME/dir/present.pptx will open in Powerpoint
          ^^^^^^^^^^^^^^^^^^^^^^
 
-
-    If `g:vimania-uri_Extensions` is set to `.md, .MD`
-
-    [link](|filename|./example.pdf) will be opened in pdf reader
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    [link](example.pdf) will be opened in pdf reader
+    ^^^^^^^^^^^^^^^^^^^
 
     Document internal linking works, too: to link to the heading Usage, use
     this [link](#usage).
@@ -104,8 +104,7 @@ The behavior can be configured via the following options:
 - `g:vimania_uri_extensions`:
     a comma separated list of file extensions.
     Only files with the given extensions will be opened in vim, all other
-    files will be opened via the configured application (using `open` on OSX
-    and `xdg-open` on linux).
+    files will be opened via OS default (`open` on OSX and `xdg-open` on linux).
 
 - `g:vimania_uri_twbm_integration`:
     Boolean flag to configure [bkmr](https://github.com/sysid/bkmr) integration (see below)
@@ -117,22 +116,35 @@ Using [vim-plug](https://github.com/junegunn/vim-plug):
 ```vim
 Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'pip install vimania-uri-rs --upgrade --target ~/.vim/plugged/vimania-uri-rs/pythonx', 'branch': 'main'}
   let g:vimania_uri_extensions=['.md','.txt','.rst','.py']
-  let g:vimania_uri_twbm_integration=1  # if bkmr is installed else 0
+  let g:vimania_uri_twbm_integration=1  "if bkmr is installed else 0
 ```
 - vim needs to be configured with python support
 - `pip` must be in path to install required dependencies into `vimania/pythonx` (no pollution of system python).
 - tested on Linux/MacOS
+- sometimes you need to refresh vim help: `:helptags ALL`
 
 Alternatively if you want to compile it yourself:
+- `rust, maturin` must be installed (on PATH) to build the plugin
 ```vim
 Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'python3 build.py', 'branch': 'main'}
 ```
-- `rust, maturin` must be installed (on PATH) to build the plugin
+
+Fully manual installation:
+```bash
+cd ~/.vim/plugged
+git clone https://github.com/sysid/vimania-uri-rs.git
+python3 build.py
+```
 
 <br>
 
 ## Credits
 - inspired by [UltiSnips](https://github.com/SirVer/ultisnips).
-- URI handling is based on work of [mdnav](https://github.com/chmp/mdnav)
+- URI handling is based on work of Christopher Prohm: mdnav 
 
 <!-- Badges -->
+
+[pypi-image]: https://badge.fury.io/py/vimania-uri-rs.svg
+[pypi-url]: https://pypi.org/project/vimania-uri-rs/
+[build-image]: https://github.com/sysid/vimania-uri-rs/actions/workflows/release.yml/badge.svg
+[build-url]: https://github.com/sysid/vimania-uri-rs/actions/workflows/release.yml

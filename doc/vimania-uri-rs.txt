@@ -1,0 +1,78 @@
+*vimania-uri-rs*
+
+       _                       _                        _                  ~
+__   _(_)_ __ ___   __ _ _ __ (_) __ _       _   _ _ __(_)      _ __ ___   ~
+\ \ / / | '_ ` _ \ / _` | '_ \| |/ _` |_____| | | | '__| |_____| '__/ __|  ~
+ \ V /| | | | | | | (_| | | | | | (_| |_____| |_| | |  | |_____| |  \__ \  ~
+  \_/ |_|_| |_| |_|\__,_|_| |_|_|\__,_|      \__,_|_|  |_|     |_|  |___/  ~
+
+==============================================================================
+CONTENTS                                             *vimania-uri-rs-contents*
+
+    1. Usage ................ |vimania-uri-rs-usage|
+    2. Handled Link Types ....|vimania-uri-rs-handled-link-types|
+    3. Mappings ............. |vimania-uri-rs-mappings|
+    4. Configuration ........ |vimania-uri-rs-configuration|
+    5. Installation ......... |vimania-uri-rs-installation|
+    6. License .............. |vimania-uri-rs-license|
+
+==============================================================================
+USAGE                                                   *vimania-uri-rs-usage*
+
+The `vimania-uri-rs` plugin handles all URIs transparently, similar to the
+native `gx` command but with enhanced functionality. The plugin provides a
+consistent and powerful way to manage various types of links and URIs directly
+from within Vim.
+
+Key features include:
+- Opening URIs, HTML, DOCX, PPTX, JPG, PNG, MP3, and more.
+- Pasting URLs as Markdown links with titles, automatically generating
+  reference-style Markdown.
+- Navigating to specific headings or line numbers within files.
+
+To use `vimania-uri-rs`, position the cursor on a URI or link and type `go`.
+
+==============================================================================
+HANDLED LINK TYPES                         *vimania-uri-rs-handled-link-types*
+
+- **Local text links**: `[foo](second.md)` will be opened inside Vim.
+    - line numbers `[foo](second.md:30)`
+    - anchors `[foo](second.md#custom-id)`.
+
+- **URL links**: `[google](https://google.com)`
+
+- **Non-text files**: Files like PDFs, images, and documents will be opened
+  using the OS default application.
+
+- **Internal links**: `[Link Text](#Target)`
+
+- **Reference style links**: `[foo][label]`
+
+- **Implicit name links**: `[foo][]`
+
+==============================================================================
+MAPPINGS                                             *vimania-uri-rs-mappings*
+
+    Default Mapping      | Details
+    ---------------------|----------------------------------------------
+    <Leader>vl           | Paste Markdown link with title
+    go                   | Handle URI under cursor (`<Plug>HandleMd`)
+    goo                  | Handle and save in bookmark manager (`<Plug>HandleMdSave`)
+
+==============================================================================
+CONFIGURATION                                   *vimania-uri-rs-configuration*
+
+- `g:vimania_uri_extensions`:
+    Comma-separated list of file extensions that should be opened in Vim.
+    All other files will be opened with the OS default application.
+
+- `g:vimania_uri_twbm_integration`:
+    Boolean flag to enable or disable integration with the Rust-based CLI
+    bookmark manager [bkmr](https://github.com/sysid/bkmr).
+
+
+LICENSE                                                   *vimania-uri-license*
+==============================================================================
+BSD
+==============================================================================
+vim:tw=78:sw=2:ts=2:ft=help:norl:nowrap:
