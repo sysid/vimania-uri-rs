@@ -22,7 +22,7 @@ dependencies = [
 requires = ["maturin>=1,<2"]
 build-backend = "maturin"
 
-[tool.rye]
+[tool.uv]
 managed = true
 dev-dependencies = [
     "maturin-import-hook>=0.1.0",

@@ -1,0 +1,34 @@
+fail_fast: true
+repos:
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.6.2
+  hooks:
+    - id: ruff
+      args: [ --fix ]
+    - id: ruff-format
+
+- repo: local
+  hooks:
+    - id: mypy
+      name: mypy
+      stages: [commit]
+      language: system
+      entry: make mypy
+      types: [python]
+      require_serial: true
+      pass_filenames: false
+    - id: pytest
+      name: pytest
+      stages: [commit]
+      language: system
+      entry: make test
+      types: [python]
+      pass_filenames: false
+
+- repo: https://github.com/astral-sh/uv-pre-commit
+  # uv version.
+  rev: 0.3.2
+  hooks:
+    # Run the pip compile
+    - id: pip-compile
+      args: [pyproject.toml, -o, requirements.txt]
