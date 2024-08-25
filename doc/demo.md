@@ -27,3 +27,6 @@ Type `vl` to paste a markdown link.
 Will jump here.
 
 [ref-style-link]: http://example.com
+
+<a name="AnchorExample">This is an anchor</a>
+<a id="AnotherAnchor">Another anchor here</a>

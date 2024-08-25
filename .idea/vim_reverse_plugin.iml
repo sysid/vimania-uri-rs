@@ -2,7 +2,7 @@
 <module type="EMPTY_MODULE" version="4">
   <component name="FacetManager">
     <facet type="Python" name="Python facet">
-      <configuration sdkName="" />
+      <configuration sdkName="Python 3.12 (vimania-uri-rs)" />
     </facet>
   </component>
   <component name="NewModuleRootManager">
@@ -14,5 +14,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Python 3.12 (vimania-uri-rs) interpreter library" level="application" />
   </component>
 </module>

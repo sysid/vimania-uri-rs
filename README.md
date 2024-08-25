@@ -19,11 +19,14 @@ with 10x faster VIM startup time and [bkmr](https://github.com/sysid/bkmr) integ
 # Why?
 Vim's native `gx` is effective but limited.
 Same is true for other plugins I am aware of. 
-I wanted more powerful URI handling in my markdown files.
+I wanted more powerful URI handling.
 
 ![demo](vimania-uri-rs-demo.png)
 
 [vimania-uri-rs demo - YouTube](https://www.youtube.com/watch?v=JLaN6cIAIY8)
+
+Works best in combination with [vim-markdown](https://github.com/preservim/vim-markdown), but is not limited
+to markdown files.
 
 ## User Interface
 
@@ -106,9 +109,12 @@ The behavior can be configured via the following options:
     Only files with the given extensions will be opened in vim, all other
     files will be opened via OS default (`open` on OSX and `xdg-open` on linux).
 
+    Default: `['.md','.txt','.rst','.py','.conf','.sh','.json','.yaml','.yml']`.
+
 - `g:vimania_uri_twbm_integration`:
     Boolean flag to configure [bkmr](https://github.com/sysid/bkmr) integration (see below)
 
+  Default: `0`.
 ---
 
 ## Installation
@@ -141,6 +147,9 @@ python3 build.py
 ## Credits
 - inspired by [UltiSnips](https://github.com/SirVer/ultisnips).
 - URI handling is based on work of Christopher Prohm: mdnav 
+
+## Similar work
+- [pursuit](https://github.com/jeetsukumaran/vim-pursuit)
 
 <!-- Badges -->
 

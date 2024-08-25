@@ -46,7 +46,7 @@ _confirm:
 TESTING:  ## ##################################################################
 .PHONY: test
 test:  ## run tests
-	python -m pytest tests -vv
+	PYTHONPATH=pythonx python -m pytest tests -vv
 
 #.PHONY: test-vim
 #test-vim:  test-vim-uri  ## run tests-vim
