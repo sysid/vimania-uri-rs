@@ -23,18 +23,21 @@ Then ():
   Assert len(getqflist()) >= 1
 
 # GOTCHA: yes prompt not working
-#Given markdown (should delete non existing entry in twbm):
-#  wiht a [url](http://www.vimania.tw) some more text
-#Do (delete line):
-#  ddy\<Enter>
-#Then ():
-#  Log printf("Current Line: %s", getline('.'))
-#  Assert 1 == line('$')
-#  Assert "" == getline('.')
-#  Messages
-#  Cfilter filter deleted twbm: 0
-#  Log printf("Len of quickfix list: %s", len(getqflist()))
-#  Assert len(getqflist()) == 1
+Given markdown ():
+Execute (delete URL, answer with 'y'):
+  VimaniaDeleteTwbm("wiht a [url](http://www.vimania.tw) some more text")
+Then ():
+#  echom "Test message to ensure capture"
+  Messages
+  " Retrieve the content of the quickfix list
+  let qflist = getqflist()
+  " Convert the quickfix list to a string
+  let qflog = join(map(qflist, 'v:val.text'), "\n")
+  " Log the quickfix list content
+  Log qflog
+  Cfilter deleted twbm: 0
+  Log printf("Len of quickfix list: %s", len(getqflist()))
+  Assert len(getqflist()) == 1
 
 Given markdown (with TOC anchors):
   [Scond Heading](#second-heading)

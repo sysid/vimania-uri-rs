@@ -25,3 +25,11 @@ Execute (delete bufer):
 Execute (set filetype):
   setf python
   AssertEqual 'python', &filetype
+
+Execute (confirm):
+  let choice = confirm("Do you want to continue?", "&Yes\n&No", 1)
+  AssertEqual choice, 1
+
+Execute (input):
+  let choice = input("Do you want to continue? (y/n): ")
+  AssertEqual choice, "y"
