@@ -151,6 +151,7 @@ class VimaniaUriManager:
         _log.debug(f"{args=}")
         if not self.twbm_integrated:
             _log.debug(f"twbm not integrated. Do nothing.")
+            return
         assert isinstance(args, str), f"Error: input must be string, got {type(args)}."
         try:
             urls = delete_twbm(args)
