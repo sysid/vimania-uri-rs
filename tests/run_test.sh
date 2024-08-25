@@ -37,7 +37,7 @@ fi
 # main
 ################################################################################
 #prep-db  # no DB required
-prep-twbm
+#prep-twbm
 
 vim -Nu <(cat << EOF
 filetype off
@@ -45,7 +45,7 @@ set rtp+=~/.vim/plugged/vader.vim
 set rtp+=~/.vim/plugged/vim-misc
 set rtp+=~/.vim/plugged/scriptease
 set rtp+=~/dev/vim/tw-vim
-set rtp+=~/dev/vim/vimania-uri
+set rtp+=~/dev/vim/vimania-uri-rs
 filetype plugin indent on
 syntax enable
 

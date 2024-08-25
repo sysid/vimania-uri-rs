@@ -52,9 +52,9 @@ test:  ## run tests
 #test-vim:  test-vim-uri  ## run tests-vim
 
 .PHONY: test-vim-uri
-test-vim-uri: build-vim  ## run tests-vim-vimania (requires libs in pythonx: make build-vim
+test-vim-uri: build-vim  ## run tests-vim-vimania (requires libs in pythonx: make build-vim)
 	@echo "- > - > - > - > - > - > - > - > - > - > - > - > - > - > - > - > - > - > - > - > "
-	pushd tests; ./run_test.sh test_vimania_uri_rs.vader; popd
+	pushd tests; ./run_test.sh test_vimania_uri.vader; popd
 	@echo "- < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < - < "
 
 ################################################################################

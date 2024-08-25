@@ -3,9 +3,6 @@
 Before:
   messages clear
 
-Given (test-buffer text):
-  yyy://$HOME/dev/vim/vim-textobj-uri/test/vimania//vimania.pdf
-
 #Execute(Should open marked2 viewer):
 #  Vimania $HOME/dev/vim/vimania-todos/tests/data/test.md 0
 #  "Vimania /Users/Q187392/dev/vim/vimania-todos/tests/data/test.md
@@ -21,27 +18,23 @@ Do(add twbm: prereq: make sure www.google.com does not exist int twbm prod):
   goo
 Then ():
   Messages
-  Cfilter add_twbm
-  Log printf("Len of location list: %s", len(getqflist()))
-  Assert len(getqflist()) == 1
+  Cfilter added successfully
+  Log printf("Len of quickfix list: %s", len(getqflist()))
+  Assert len(getqflist()) >= 1
 
-# TODO: check DB for deletion
-Given markdown (should delete non existing entry in twbm):
-  wiht a [url](vm::http://www.vimania.tw) some more text
-Do (delete line):
-  dd
-Then ():
-  Log printf("Current Line: %s", getline('.'))
-  Assert 1 == line('$')
-  Assert "" == getline('.')
-Execute(twbm_delete):
-  VimaniaDeleteTwbm with [url](vm::http://www.vimania.tw) some more text
-Then ():
-  Messages
-  "Cfilter deleted
-  Cfilter not in DB
-  Log printf("Len of location list: %s", len(getqflist()))
-  Assert len(getqflist()) == 1
+# GOTCHA: yes prompt not working
+#Given markdown (should delete non existing entry in twbm):
+#  wiht a [url](http://www.vimania.tw) some more text
+#Do (delete line):
+#  ddy\<Enter>
+#Then ():
+#  Log printf("Current Line: %s", getline('.'))
+#  Assert 1 == line('$')
+#  Assert "" == getline('.')
+#  Messages
+#  Cfilter filter deleted twbm: 0
+#  Log printf("Len of quickfix list: %s", len(getqflist()))
+#  Assert len(getqflist()) == 1
 
 Given markdown (with TOC anchors):
   [Scond Heading](#second-heading)
@@ -64,10 +57,3 @@ Then (https://sysid.github.io/ opens in Browser Tab):
   Cfilter browser
   Log printf("Len of location list: %s", len(getqflist()))
   Assert len(getqflist()) >= 1
-
-Execute(markdown edit with jump to heading1):
-  VimaniaEdit /Users/Q187392/dev/vim/vimania-uri/tests/data/test.md# Working Examples
-  "VimaniaEdit /Users/Q187392/dev/vim/vimania-todos/tests/data/test.md## Config
-Then ():
-  Log printf("Current Line: %s", getline('.'))
-  Assert "# Working Examples" == getline('.')

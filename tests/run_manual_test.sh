@@ -11,25 +11,25 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-TW_XXX_DB_URL=sqlite:///data/vader.db vim -Nu <(cat << EOF
+vim -Nu <(cat << EOF
 filetype off
 set rtp+=~/.vim/plugged/vader.vim
 set rtp+=~/.vim/plugged/vim-misc
 set rtp+=~/.vim/plugged/scriptease
 set rtp+=~/.vim/plugged/vim-textobj-user
 set rtp+=~/dev/vim/tw-vim
-set rtp+=~/dev/vim/vimania
+set rtp+=~/dev/vim/vimania-uri-rs
 filetype plugin indent on
 syntax enable
+
+" TWBM INTEGRATION:
+let g:vimania_uri_twbm_integration=1
+" URI extensions
+let g:vimania_uri_extensions=['.md', '.txt', '.py']
 
 let g:twvim_debug = 1
 let g:os = 'Darwin'
 if g:twvim_debug | echom "-D- Debugging is activated." | endif
-
-" required by tw-vim
-let g:twvim_config = {
-      \ 'diary_path': '/Users/Q187392/vimwiki/diary',
-\ }
 
 " to aovid prompting
 set shortmess+=at
