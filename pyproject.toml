@@ -13,6 +13,10 @@ classifiers = [
 ]
 dependencies = [
 ]
+homepage = "https://github.com/sysid/vimania-uri-rs"
+
+[project.urls]
+Source = "https://github.com/sysid/vimania-uri-rs"
 
 #[build-system]
 #requires = ["hatchling"]
