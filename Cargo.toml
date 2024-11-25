@@ -38,5 +38,5 @@ default = ["extension-module"]
 mockito = "1.5.0"
 
 [build-dependencies]
-pyo3-build-config = "0.22.2"
+pyo3-build-config = "0.23.1"
 
