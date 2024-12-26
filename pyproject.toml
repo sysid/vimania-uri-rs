@@ -28,13 +28,13 @@ build-backend = "maturin"
 [tool.uv]
 managed = true
 dev-dependencies = [
-    "maturin-import-hook>=1.1.1",
-    "pip>=24.2",
-    "pytest>=8.3.2",
-    "pytest-mock>=3.14.0",
-    "ruff>=0.6.1",
     "isort>=5.13.2",
-    "mypy>=1.11.1",
+    "maturin-import-hook>=0.1.0",
+    "mypy>=1.14.0",
+    "pip>=24.3.1",
+    "pytest>=8.3.4",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.8.4",
 ]
 
 [tool.hatch.metadata]

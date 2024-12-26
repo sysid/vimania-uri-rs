@@ -50,16 +50,30 @@ def build_rust_extension(python_executable: str, is_dev: bool) -> None:
         sys.exit(1)
 
 
+# def find_wheel_file(wheels_dir: str) -> str:
+#     """Locate the generated wheel file."""
+#     wheel_files = glob.glob(os.path.join(wheels_dir, "*.whl"))
+#
+#     if not wheel_files:
+#         print("No wheel file found. Something went wrong with the build.")
+#         sys.exit(1)
+#
+#     return wheel_files[0]
+
 def find_wheel_file(wheels_dir: str) -> str:
-    """Locate the generated wheel file."""
-    wheel_files = glob.glob(os.path.join(wheels_dir, "*.whl"))
+    """Locate the generated wheel file for the current Python version."""
+    python_version = f"cp{sys.version_info.major}{sys.version_info.minor}"
+    wheel_files = glob.glob(os.path.join(wheels_dir, f"*{python_version}*.whl"))
 
     if not wheel_files:
-        print("No wheel file found. Something went wrong with the build.")
+        print(f"No wheel file found for Python {python_version}.")
+        all_wheels = glob.glob(os.path.join(wheels_dir, "*.whl"))
+        if all_wheels:
+            print("Available wheels:", "\n".join(all_wheels))
         sys.exit(1)
 
-    return wheel_files[0]
-
+    # If multiple files exist, take the most recent one
+    return sorted(wheel_files)[-1]
 
 def install_wheel(wheel_file: str, target_dir: str, python_executable: str) -> None:
     """Install the wheel file into the specified target directory."""
@@ -107,7 +121,7 @@ def build_and_install_extension(is_dev: bool) -> None:
     target_os = platform.system().lower()
     python_path = sys.executable
 
-    print(f"Building Rust extension for Python {python_version} on {target_os}")
+    print(f"Building Rust extension for Python {python_version} on {target_os}: {python_path}")
 
     ensure_cargo_installed()
     build_rust_extension(python_path, is_dev)
