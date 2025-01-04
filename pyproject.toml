@@ -1,6 +1,6 @@
 [project]
 name = "vimania_uri_rs"
-version = "1.1.1"
+version = "1.1.2"
 description = "Add your description here"
 authors = [
     { name = "sysid", email = "sysid@gmx.de" }
@@ -44,7 +44,7 @@ allow-direct-references = true
 packages = ["py"]
 
 [tool.bumpversion]
-current_version = "1.1.1"
+current_version = "1.1.2"
 commit = true
 tag = false
 message = "Bump version to {new_version}"
