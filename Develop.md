@@ -13,3 +13,6 @@ Load the /Users/tw/dev/s/private/vimania-uri-rs directory:
 ```bash
 Plug '~/dev/vim/vimania-uri-rs'
 ```
+
+## IDE
+- rustrover with community python plugin

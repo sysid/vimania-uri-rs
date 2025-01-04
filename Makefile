@@ -48,6 +48,10 @@ TESTING:  ## ##################################################################
 test:  ## run tests
 	PYTHONPATH=pythonx python -m pytest tests -vv
 
+.PHONY: test-rust
+test-rust:  ## test-rust
+	cargo test --lib
+
 #.PHONY: test-vim
 #test-vim:  test-vim-uri  ## run tests-vim
 
