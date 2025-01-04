@@ -56,12 +56,18 @@ message = "Bump version to {new_version}"
 "pyproject.toml" = [
     {search = "version = {current_version}", replace = "version = {new_version}"},
 ]
+"Cargo.toml" = [
+    {search = "version = {current_version}", replace = "version = {new_version}"},
+]
 
 [[tool.bumpversion.files]]
 filename = "VERSION"
 
 [[tool.bumpversion.files]]
 filename = "pyproject.toml"
+
+[[tool.bumpversion.files]]
+filename = "Cargo.toml"
 
 [tool.isort]
 multi_line_output = 3

@@ -1,6 +1,6 @@
 [package]
 name = "vimania_uri_rs"
-version = "0.1.0"
+version = "1.1.4"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -39,4 +39,3 @@ mockito = "1.6.1"
 
 [build-dependencies]
 pyo3-build-config = "0.23.3"
-
