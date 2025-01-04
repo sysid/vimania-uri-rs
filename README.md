@@ -118,24 +118,24 @@ The behavior can be configured via the following options:
 ---
 
 ## Installation
-Using [vim-plug](https://github.com/junegunn/vim-plug):
+### 1. [vim-plug](https://github.com/junegunn/vim-plug):
 ```vim
 Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'pip install vimania-uri-rs --upgrade --target ~/.vim/plugged/vimania-uri-rs/pythonx', 'branch': 'main'}
   let g:vimania_uri_extensions=['.md','.txt','.rst','.py']
   let g:vimania_uri_twbm_integration=1  "if bkmr is installed else 0
 ```
-- vim needs to be configured with python support
-- `pip` must be in path to install required dependencies into `vimania/pythonx` (no pollution of system python).
+- vim must be compiled with `+python3` support.
+- `pip` must be in PATH for installation of dependencies in `vimania/pythonx`.
 - tested on Linux/MacOS
 - sometimes you need to refresh vim help: `:helptags ALL`
 
-Alternatively if you want to compile it yourself:
+### 2. If you want to compile it yourself:
 - `rust, maturin` must be installed (on PATH) to build the plugin
 ```vim
 Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'python3 build.py', 'branch': 'main'}
 ```
 
-Fully manual installation:
+### 3. Manual installation:
 ```bash
 cd ~/.vim/plugged
 git clone https://github.com/sysid/vimania-uri-rs.git
