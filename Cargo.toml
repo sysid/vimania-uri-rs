@@ -25,7 +25,7 @@ pyo3 = { version = "0.23.3", features = ["extension-module", "anyhow"] }
 pyo3-log = "0.12.1"
 reqwest = { version = "0.12.12", features = ["blocking", "rustls-tls"] }
 rstest = "0.24.0"
-scraper = "0.22.0"
+scraper = "0.23.1"
 stdext = "0.3.3"
 
 # https://pyo3.rs/v0.7.0-alpha.1/advanced.html#testing
