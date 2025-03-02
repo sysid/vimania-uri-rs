@@ -82,20 +82,20 @@ requirements:  ## create requirements.txt
 	vim pythonx/requirements.txt
 
 .PHONY: vim-install
-vim-install:  ## vim Plug install
+vim-install:  ## vim Plug install (external)
 	sed -i.bkp "s#^\"Plug 'https://github.com/sysid/vimania-uri-rs.git'#Plug 'https://github.com/sysid/vimania-uri-rs.git'#" $(VIM_PLUG)
 	sed -i.bkp "s#^Plug '~/dev/vim/vimania-uri-rs'#\"Plug '~/dev/vim/vimania-uri-rs'#" $(VIM_PLUG)
 	vim -c ':PlugInstall vimania-uri-rs'
 
 .PHONY: vim-uninstall
-vim-uninstall:  ## vim Plug uninstall
+vim-uninstall:  ## vim Plug uninstall (use local)
 	-[ -d "$(HOME)/.vim/plugged/vimania-uri-rs" ] && rm -fr "$(HOME)/.vim/plugged/vimania-uri-rs"
 	sed -i.bkp "s#^\"Plug '~/dev/vim/vimania-uri-rs'#Plug '~/dev/vim/vimania-uri-rs'#" $(VIM_PLUG)
 	sed -i.bkp "s#^Plug 'https://github.com/sysid/vimania-uri-rs.git'#\"Plug 'https://github.com/sysid/vimania-uri-rs.git'#" $(VIM_PLUG)
 	#vim -c ':PlugClean vimania-uri-rs'
 
 .PHONY: upload
-upload:  ## upload to PyPi
+upload:  ## upload to PyPi (now via CICD)
 	@echo "upload"
 	twine upload --verbose pythonx/dist/*
 
