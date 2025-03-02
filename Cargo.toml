@@ -15,17 +15,17 @@ name = "vimania_uri_rs"
 crate-type = ["cdylib"]
 
 [dependencies]
-anyhow = "1.0.95"
+anyhow = "1.0.96"
 camino = "1.1.9"
-ctor = "0.2.9"
+ctor = "0.4.0"
 env_logger = "0.11.6"
 itertools = "0.14.0"
-log = "0.4.22"
-pyo3 = { version = "0.23.3", features = ["extension-module", "anyhow"] }
+log = "0.4.26"
+pyo3 = { version = "0.23.5", features = ["extension-module", "anyhow"] }
 pyo3-log = "0.12.1"
 reqwest = { version = "0.12.12", features = ["blocking", "rustls-tls"] }
-rstest = "0.24.0"
-scraper = "0.22.0"
+rstest = "0.25.0"
+scraper = "0.23.1"
 stdext = "0.3.3"
 
 # https://pyo3.rs/v0.7.0-alpha.1/advanced.html#testing
@@ -38,4 +38,4 @@ default = ["extension-module"]
 mockito = "1.6.1"
 
 [build-dependencies]
-pyo3-build-config = "0.23.3"
+pyo3-build-config = "0.23.5"
