@@ -1,6 +1,7 @@
 [project]
 name = "vimania_uri_rs"
 version = "1.1.5"
+license = "BSD-3-Clause"
 description = "Add your description here"
 authors = [
     { name = "sysid", email = "sysid@gmx.de" }
