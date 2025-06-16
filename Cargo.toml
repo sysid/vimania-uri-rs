@@ -21,7 +21,7 @@ ctor = "0.4.0"
 env_logger = "0.11.6"
 itertools = "0.14.0"
 log = "0.4.26"
-pyo3 = { version = "0.24.0", features = ["extension-module", "anyhow"] }
+pyo3 = { version = "0.25.1", features = ["extension-module", "anyhow"] }
 pyo3-log = "0.12.1"
 reqwest = { version = "0.12.12", features = ["blocking", "rustls-tls"] }
 rstest = "0.25.0"
