@@ -27,9 +27,27 @@ all: clean build upload tag  ## Build and upload
 ################################################################################
 # Developing \
 DEVELOPING:  ## ###############################################################
+.PHONY: setup
+setup:  ## one-time development environment setup
+	@echo "Setting up development environment..."
+	uv sync
+	uv run maturin develop
+# 	uv run pre-commit install
+	@echo "✅ Development environment ready!"
+
 .PHONY: dev
-dev: _confirm clean-vim  ## develop python module, prep accordingly
+dev: setup  ## setup environment and open IDE
 	rustrover .
+
+.PHONY: quick-dev
+quick-dev:  ## fast development build (no confirmation)
+	uv run maturin develop
+
+.PHONY: check
+check: quality security test-all  ## comprehensive check (quality + security + tests)
+
+.PHONY: ci
+ci: setup check  ## simulate CI pipeline locally
 
 .PHONY: dev-vim
 dev-vim:  ## open vim plugin and Makefile
@@ -46,11 +64,14 @@ _confirm:
 TESTING:  ## ##################################################################
 .PHONY: test
 test:  ## run tests
-	PYTHONPATH=pythonx python -m pytest tests -vv
+	PYTHONPATH=pythonx uv run pytest tests -vv
 
 .PHONY: test-rust
-test-rust:  ## test-rust
+test-rust:  ## run Rust tests
 	cargo test --lib
+
+.PHONY: test-all
+test-all: test test-rust  ## run all tests (Python and Rust)
 
 #.PHONY: test-vim
 #test-vim:  test-vim-uri  ## run tests-vim
@@ -66,9 +87,6 @@ test-vim-uri: build-vim  ## run tests-vim-vimania (requires libs in pythonx: mak
 BUILDING:  ## #################################################################
 .PHONY: build-vim
 build-vim: _confirm clean-vim ## clean and re-install via pip into pythonx
-	#pip install -r pythonx/requirements.txt --target pythonx
-	#cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs-0.1.0.dist-info pythonx/
-	#cp -a .venv/lib/python3.12/site-packages/vimania_uri_rs pythonx/
 	python build.py --dev
 
 .PHONY: clean-vim
@@ -77,9 +95,8 @@ clean-vim:  ## clean pythonx directory for PyCharm development
 	@pushd pythonx; git clean -d -x -f; popd
 
 .PHONY: requirements
-requirements:  ## create requirements.txt
-	#pipenv lock -r > pythonx/requirements.txt
-	vim pythonx/requirements.txt
+requirements:  ## update dependencies with uv
+	uv sync
 
 .PHONY: vim-install
 vim-install:  ## vim Plug install (external)
@@ -136,26 +153,57 @@ QUALITY:  ## ##################################################################
 
 .PHONY: format
 format:  ## perform ruff formatting
-	@ruff format $(pkg_src) $(tests_src)
+	@uv run ruff format $(pkg_src) $(tests_src)
 
 .PHONY: format-check
-format-check:  ## perform ruff formatting
-	@ruff format --check $(pkg_src) $(tests_src)
+format-check:  ## check ruff formatting
+	@uv run ruff format --check $(pkg_src) $(tests_src)
 
 .PHONY: sort-imports
 sort-imports:  ## apply import sort ordering
-	isort $(pkg_src) $(tests_src) --profile black
+	uv run isort $(pkg_src) $(tests_src) --profile black
 
 .PHONY: style
-style: sort-imports format  ## perform code style format (black, isort)
+style: sort-imports format  ## perform code style format (ruff, isort)
 
 .PHONY: lint
 lint:  ## check style with ruff
-	ruff check $(pkg_src) $(tests_src)
+	uv run ruff check $(pkg_src) $(tests_src)
 
 .PHONY: mypy
 mypy:  ## check type hint annotations
-	@mypy --config-file pyproject.toml --install-types --non-interactive $(pkg_src)
+	@uv run mypy --config-file pyproject.toml --install-types --non-interactive $(pkg_src)
+
+.PHONY: rust-format
+rust-format:  ## format Rust code
+	cargo fmt
+
+.PHONY: rust-lint
+rust-lint:  ## lint Rust code
+	cargo clippy -- -D warnings
+
+.PHONY: rust-check
+rust-check:  ## check Rust code compiles
+	cargo check
+
+.PHONY: quality
+quality: lint mypy format-check rust-lint  ## run all quality checks
+
+.PHONY: quality-fix
+quality-fix: style rust-format  ## fix all auto-fixable quality issues
+
+.PHONY: security
+security:  ## run security checks
+	uv run bandit -r $(pkg_src)
+	cargo audit
+
+.PHONY: pre-commit
+pre-commit:  ## run pre-commit hooks on all files
+	uv run pre-commit run --all-files
+
+.PHONY: pre-commit-update
+pre-commit-update:  ## update pre-commit hooks
+	uv run pre-commit autoupdate
 
 
 ################################################################################
