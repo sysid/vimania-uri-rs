@@ -3,10 +3,10 @@
 
 """Wrapper functionality around the functions we need from Vim."""
 import logging
+from contextlib import contextmanager
+from typing import Any, Generator, List, Union
 
 log = logging.getLogger("vimania-uri_.vim_.vim_helper")
-
-from contextlib import contextmanager
 
 # from UltiSnips.snippet.source.file.common import normalize_file_path
 # noinspection PyUnresolvedReferences
@@ -15,7 +15,7 @@ try:
     # noinspection PyUnresolvedReferences
     import vim
     from vim import error
-except:
+except ImportError:
     # print("No vim module available outside vim")
     pass
 
@@ -74,17 +74,17 @@ buf = VimBuffer()  # pylint:disable=invalid-name
 
 
 @contextmanager
-def option_set_to(name, new_value):
+def option_set_to(name: str, new_value: str) -> Generator[None, None, None]:
     old_value = vim.eval("&" + name)
-    command("set {0}={1}".format(name, new_value))
+    command(f"set {name}={new_value}")
     try:
         yield
     finally:
-        command("set {0}={1}".format(name, old_value))
+        command(f"set {name}={old_value}")
 
 
 @contextmanager
-def save_mark(name):
+def save_mark(name: str) -> Generator[None, None, None]:
     old_pos = get_mark_pos(name)
     try:
         yield
@@ -95,11 +95,11 @@ def save_mark(name):
             set_mark_from_pos(name, old_pos)
 
 
-def escape(inp):
+def escape(inp: Union[str, dict, list]) -> str:
     """Creates a vim-friendly string from a group of
     dicts, lists and strings."""
 
-    def conv(obj):
+    def conv(obj: Union[str, dict, list]) -> str:
         """Convert obj."""
         if isinstance(obj, list):
             rv = "[" + ",".join(conv(o) for o in obj) + "]"
@@ -108,30 +108,30 @@ def escape(inp):
                 "{"
                 + ",".join(
                     [
-                        "%s:%s" % (conv(key), conv(value))
-                        for key, value in obj.iteritems()
+                        f"{conv(key)}:{conv(value)}"
+                        for key, value in obj.items()
                     ]
                 )
                 + "}"
             )
         else:
-            rv = '"%s"' % obj.replace('"', '\\"')
+            rv = f'"{str(obj).replace('"', '\\"')}"'
         return rv
 
     return conv(inp)
 
 
-def command(cmd):
+def command(cmd: str) -> None:
     """Wraps vim.command."""
     return vim.command(cmd)
 
 
-def eval(text):
+def eval(text: str) -> Any:
     """Wraps vim.eval."""
     return vim.eval(text)
 
 
-def bindeval(text):
+def bindeval(text: str) -> Any:
     """Wraps vim.bindeval."""
     rv = vim.bindeval(text)
     if not isinstance(rv, (dict, list)):
@@ -139,7 +139,7 @@ def bindeval(text):
     return rv
 
 
-def feedkeys(keys, mode="n"):
+def feedkeys(keys: str, mode: str = "n") -> None:
     """Wrapper around vim's feedkeys function.
 
     Mainly for convenience.
@@ -156,10 +156,10 @@ def feedkeys(keys, mode="n"):
     if keys == "startinsert":
         command("startinsert")
     else:
-        command(r'call feedkeys("%s", "%s")' % (keys, mode))
+        command(f'call feedkeys("{keys}", "{mode}")')
 
 
-def new_scratch_buffer(text):
+def new_scratch_buffer(text: str) -> None:
     """Create a new scratch buffer with the text given."""
     vim.command("botright new")
     vim.command("set ft=")
@@ -221,27 +221,6 @@ def select(start, end):
     feedkeys(move_cmd)
 
 
-# def get_dot_vim():
-#     """Returns the likely place for ~/.vim for the current setup."""
-#     home = vim.eval("$HOME")
-#     candidates = []
-#     if platform.system() == "Windows":
-#         candidates.append(os.path.join(home, "vimfiles"))
-#     if vim.eval("has('nvim')") == "1":
-#         xdg_home_config = vim.eval("$XDG_CONFIG_HOME") or os.path.join(home, ".config")
-#         candidates.append(os.path.join(xdg_home_config, "nvim"))
-#
-#     candidates.append(os.path.join(home, ".vim"))
-#
-#     if "MYVIMRC" in os.environ:
-#         my_vimrc = os.path.expandvars(os.environ["MYVIMRC"])
-#         candidates.append(normalize_file_path(os.path.dirname(my_vimrc)))
-#     for candidate in candidates:
-#         if os.path.isdir(candidate):
-#             return normalize_file_path(candidate)
-#     raise RuntimeError(
-#         "Unable to find user configuration directory. I tried '%s'." % candidates
-#     )
 
 
 def set_mark_from_pos(name, pos):

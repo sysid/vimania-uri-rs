@@ -1,5 +1,3 @@
-from typing import Sequence, Tuple
-
 import pytest
 from vimania_uri_.bms.handler import add_twbm, delete_twbm
 
