@@ -70,6 +70,9 @@ filename = "pyproject.toml"
 [[tool.bumpversion.files]]
 filename = "Cargo.toml"
 
+[[tool.bumpversion.files]]
+filename = "Cargo.lock"
+
 [tool.isort]
 multi_line_output = 3
 include_trailing_comma = true
