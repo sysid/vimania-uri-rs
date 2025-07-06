@@ -1,38 +1,54 @@
-# Advanced URI Handling for the Modern Vim User
+# vimania-uri-rs
+
+**Advanced URI Handling for the Modern Vim User**
 
 [![Downloads](https://static.pepy.tech/badge/vimania-uri-rs/month)](https://pepy.tech/project/vimania-uri-rs)
 [![PyPI Version][pypi-image]][pypi-url]
 [![Build Status][build-image]][build-url]
+[![Security Audit](https://github.com/sysid/vimania-uri-rs/actions/workflows/test.yml/badge.svg)](https://github.com/sysid/vimania-uri-rs/actions/workflows/test.yml)
 
-> Background: [Rewriting a Vim Plugin in Rust](https://sysid.github.io/rewriting-a-vim-plugin-in-rust-vimania-uri-rs/)
+> **Background**: [Rewriting a Vim Plugin in Rust](https://sysid.github.io/rewriting-a-vim-plugin-in-rust-vimania-uri-rs/)
 
-This Rust re-implementation of VIM plugin [vimania-uri](https://github.com/sysid/vimania-uri)
-with 10x faster VIM startup time and [bkmr](https://github.com/sysid/bkmr) integration.
+A high-performance Rust reimplementation of the [vimania-uri](https://github.com/sysid/vimania-uri) Vim plugin, delivering **10x faster startup times** and seamless [bkmr](https://github.com/sysid/bkmr) bookmark manager integration.
 
-# Key Features
-1. **Open URIs and Various File Types**: Seamlessly open URIs, HTML files, DOCX, PPTX, JPG, PNG, MP3, and more.
-2. **Handle Almost Any URI**: Manage a wide range of URI formats, ensuring maximum compatibility and flexibility.
-3. **Paste URLs as Markdown Links**: Automatically fetch the title and create reference-style Markdown links for easy documentation.
-4. **Jump to Headings or Line Numbers**: Navigate directly to specific headings or line numbers within files for quick access.
-5. **Bookmark Manager Integration**: Load your URIs into Rust based CLI Bookmark Manager [bkmr](https://github.com/sysid/bkmr).
+## ✨ Key Features
 
-# Why?
-Vim's native `gx` is effective but limited.
-Same is true for other plugins I am aware of. 
-I wanted more powerful URI handling.
+- 🚀 **Lightning Fast**: 10x faster startup than pure Python implementations
+- 🔗 **Universal URI Support**: Handle web URLs, local files, internal links, and more
+- 📝 **Smart Markdown Integration**: Auto-fetch page titles for reference-style links
+- 🎯 **Precise Navigation**: Jump to specific headings, line numbers, or anchors
+- 📚 **Bookmark Integration**: Seamless integration with [bkmr](https://github.com/sysid/bkmr) CLI bookmark manager
+- 🛡️ **Security First**: Built-in SSRF protection and comprehensive security auditing
+- 🔧 **Extensive Format Support**: Open HTML, DOCX, PPTX, images, audio, and more
+- 💎 **Modern Architecture**: Rust core with Python integration for optimal performance
 
-![demo](vimania-uri-rs-demo.png)
+## 🎯 Why vimania-uri-rs?
 
-[vimania-uri-rs demo - YouTube](https://www.youtube.com/watch?v=JLaN6cIAIY8)
+While Vim's native `gx` command and existing plugins provide basic URI handling, they often fall short in terms of:
+- **Performance**: Slow startup times and laggy URL processing
+- **Features**: Limited format support and navigation capabilities  
+- **Security**: No protection against malicious URLs
+- **Integration**: Poor bookmark manager integration
 
-Works best in combination with [vim-markdown](https://github.com/preservim/vim-markdown), but is not limited
-to markdown files.
+vimania-uri-rs addresses all these limitations with a modern, high-performance solution.
 
-## User Interface
+### 📹 Demo
 
-> Position cursor on URI and type `go`.
+![Demo](vimania-uri-rs-demo.png)
 
-    go
+[📺 Watch the full demo on YouTube](https://www.youtube.com/watch?v=JLaN6cIAIY8)
+
+**Best paired with**: [vim-markdown](https://github.com/preservim/vim-markdown), but works excellently with any file type.
+
+## 🚀 Quick Start
+
+**It's simple**: Position your cursor on any URI and press `go`.
+
+```vim
+go
+```
+
+That's it! The plugin intelligently determines how to handle the URI based on its type and context.
 
 ## Handled Link Types
 - **local text links**:
@@ -102,45 +118,93 @@ The following links will be handled (the possible cursor positions are indicated
     [ref-style-link]: http://example.com
 
 
-The behavior can be configured via the following options:
+## ⚙️ Configuration
 
-- `g:vimania_uri_extensions`:
-    a comma separated list of file extensions.
-    Only files with the given extensions will be opened in vim, all other
-    files will be opened via OS default (`open` on OSX and `xdg-open` on linux).
+### Core Settings
 
-    Default: `['.md','.txt','.rst','.py','.conf','.sh','.json','.yaml','.yml']`.
+```vim
+" File extensions to open in Vim (others use OS default)
+let g:vimania_uri_extensions = ['.md', '.txt', '.rst', '.py', '.conf', '.sh', '.json', '.yaml', '.yml']
 
-- `g:vimania_uri_twbm_integration`:
-    Boolean flag to configure [bkmr](https://github.com/sysid/bkmr) integration (see below)
+" Enable bookmark manager integration (requires bkmr)
+let g:vimania_uri_twbm_integration = 0  " Set to 1 if bkmr is installed
 
-  Default: `0`.
+" Custom key mapping (default: 'go')
+nmap <leader>u <Plug>vimania_uri_go
+```
+
+### Advanced Configuration
+
+```vim
+" Log level for debugging (DEBUG, INFO, WARNING, ERROR)
+let g:vimania_uri_log_level = 'INFO'
+
+" Timeout for URL requests (milliseconds)
+let g:vimania_uri_timeout = 3000
+
+" Custom browser command (optional)
+let g:vimania_uri_browser_cmd = 'firefox'
+```
+
+### Environment Variables
+
+- `BKMR_DB_URL`: Database URL for bkmr integration
+- `LOG_LEVEL`: Override log level (DEBUG, INFO, WARNING, ERROR)
+- `VIMANIA_URI_TIMEOUT`: Request timeout in seconds
 ---
 
-## Installation
-### 1. [vim-plug](https://github.com/junegunn/vim-plug):
-```vim
-Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'pip install vimania-uri-rs --upgrade --target ~/.vim/plugged/vimania-uri-rs/pythonx', 'branch': 'main'}
-  let g:vimania_uri_extensions=['.md','.txt','.rst','.py']
-  let g:vimania_uri_twbm_integration=1  "if bkmr is installed else 0
-```
-- vim must be compiled with `+python3` support.
-- `pip` must be in PATH for installation of dependencies in `vimania/pythonx`.
-- tested on Linux/MacOS
-- sometimes you need to refresh vim help: `:helptags ALL`
+## 📦 Installation
 
-### 2. If you want to compile it yourself:
-- `rust, maturin` must be installed (on PATH) to build the plugin
+### Prerequisites
+- Vim compiled with `+python3` support
+- Python 3.10 or higher
+- `pip` in your PATH
+
+### Method 1: vim-plug (Recommended)
+
 ```vim
-Plug 'https://github.com/sysid/vimania-uri-rs.git', {'do': 'python3 build.py', 'branch': 'main'}
+" Add to your .vimrc
+Plug 'https://github.com/sysid/vimania-uri-rs.git', {
+  \ 'do': 'pip install vimania-uri-rs --upgrade --target ~/.vim/plugged/vimania-uri-rs/pythonx',
+  \ 'branch': 'main'
+  \ }
+
+" Configuration
+let g:vimania_uri_extensions = ['.md', '.txt', '.rst', '.py', '.json', '.yaml']
+let g:vimania_uri_twbm_integration = 1  " Enable bkmr integration (requires bkmr)
 ```
 
-### 3. Manual installation:
+### Method 2: Build from Source
+
+For developers or if you want the latest features:
+
+```vim
+" Requires: rust, maturin in PATH
+Plug 'https://github.com/sysid/vimania-uri-rs.git', {
+  \ 'do': 'python3 build.py',
+  \ 'branch': 'main'
+  \ }
+```
+
+### Method 3: Manual Installation
+
 ```bash
 cd ~/.vim/plugged
 git clone https://github.com/sysid/vimania-uri-rs.git
+cd vimania-uri-rs
 python3 build.py
 ```
+
+### Post-Installation
+
+1. Restart Vim
+2. Run `:helptags ALL` to refresh help documentation
+3. Test with `:echo has('python3')` (should return 1)
+
+### Supported Platforms
+- ✅ Linux (x86_64, ARM64)
+- ✅ macOS (Intel, Apple Silicon)
+- ⚠️ Windows (experimental support)
 
 <br>
 
