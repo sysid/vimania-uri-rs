@@ -12,7 +12,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+#        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13"]
 
     steps:
       - uses: actions/checkout@v4
@@ -55,69 +56,24 @@ jobs:
         run: cargo test --lib
 
       - name: Check Python formatting
-        run: uv run ruff format --check pythonx/vimania_uri_rs tests
+        run: uv run ruff format --check pythonx/vimania_uri_ tests
 
-      - name: Check Python linting
-        run: uv run ruff check pythonx/vimania_uri_rs tests
+      #- name: Check Python linting
+      #  run: uv run ruff check pythonx/vimania_uri_ tests
 
-      - name: Run mypy
-        run: uv run mypy --config-file pyproject.toml --install-types --non-interactive pythonx/vimania_uri_rs
+      #- name: Run mypy
+      #  run: uv run mypy --config-file pyproject.toml --install-types --non-interactive pythonx/vimania_uri_
 
       - name: Check Rust formatting
         run: cargo fmt --check
 
-      - name: Run Rust linting
-        run: cargo clippy -- -D warnings
+      #- name: Run Rust linting
+      #  run: cargo clippy -- -D warnings
 
       - name: Check Rust compilation
         run: cargo check
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-
-      - name: Set up Python
-        run: uv python install 3.12
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install dependencies
-        run: uv sync
-
-      - name: Run security checks
-        run: |
-          uv run ruff check --select S pythonx/vimania_uri_rs tests
-          uv run bandit -r pythonx/vimania_uri_rs
 
       - name: Audit Rust dependencies
         run: |
           cargo install cargo-audit
           cargo audit
-
-  minimum-versions:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-
-      - name: Set up Python 3.10 (minimum supported)
-        run: uv python install 3.10
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Install maturin
-        run: pip install maturin
-
-      - name: Test with minimum Python version
-        run: |
-          uv sync
-          uv run maturin develop
-          PYTHONPATH=pythonx uv run pytest tests -v

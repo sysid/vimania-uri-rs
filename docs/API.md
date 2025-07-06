@@ -136,25 +136,6 @@ Fetches the title of a web page (delegates to Rust).
 - `url` (str): URL to fetch title from
 - Returns: Page title string or error message
 
-#### `vimania_uri_.bms.handler`
-
-**`add_twbm(url, filename)`**
-Adds a bookmark to the bkmr database.
-
-```python
-from vimania_uri_.bms.handler import add_twbm
-
-result_code = add_twbm("https://example.com", "bookmarks.md")
-```
-
-**`delete_twbm(url)`**
-Removes a bookmark from the bkmr database.
-
-```python
-from vimania_uri_.bms.handler import delete_twbm
-
-results = delete_twbm("https://example.com")
-```
 
 ## Rust API
 
@@ -229,14 +210,6 @@ pub enum UriError {
 let g:vimania_uri_extensions = ['.md', '.txt', '.py']
 ```
 
-#### `g:vimania_uri_twbm_integration`
-**Type:** Boolean (0 or 1)  
-**Default:** `0`  
-**Description:** Enable integration with bkmr bookmark manager.
-
-```vim
-let g:vimania_uri_twbm_integration = 1
-```
 
 #### `g:vimania_uri_log_level`
 **Type:** String  
@@ -300,28 +273,6 @@ endfunction
 autocmd User VimaniaUriPre call CustomProtocolHandler(expand('<cWORD>'))
 ```
 
-### Bookmark Integration
-
-For advanced bookmark integration:
-
-```python
-# Custom bookmark handler
-def custom_bookmark_handler(url, title, tags=None):
-    """Custom logic for bookmark handling"""
-    import json
-    
-    bookmark = {
-        'url': url,
-        'title': title,
-        'tags': tags or [],
-        'timestamp': time.time()
-    }
-    
-    # Custom storage logic here
-    with open('custom_bookmarks.json', 'a') as f:
-        json.dump(bookmark, f)
-        f.write('\n')
-```
 
 ### Pre/Post Processing Hooks
 

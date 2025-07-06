@@ -69,18 +69,11 @@ if int(vim.eval("exists('g:vimania_uri_extensions')")):
 else:
     extensions = None
 
-if int(vim.eval("exists('g:vimania_uri_twbm_integration')")):
-    twbm_integrated = vim.eval("g:vimania_uri_twbm_integration")
-    twbm_integrated = True if int(twbm_integrated) == 1 else False
-else:
-    twbm_integrated = False
-
-_log.debug(f"{extensions=}, {twbm_integrated=}")
+_log.debug(f"{extensions=}")
 
 xUriMgr = VimaniaUriManager(
     plugin_root_dir=plugin_root_dir,
     extensions=extensions,
-    twbm_integrated=twbm_integrated,
 )
 
 _log.debug(

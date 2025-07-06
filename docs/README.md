@@ -46,8 +46,6 @@ Position cursor on any URI and press `go`:
 " File extensions to open in Vim
 let g:vimania_uri_extensions = ['.md', '.txt', '.py', '.json']
 
-" Enable bookmark manager integration  
-let g:vimania_uri_twbm_integration = 1
 
 " Custom key mapping
 nmap <leader>u <Plug>vimania_uri_go
@@ -88,8 +86,6 @@ python3 build.py
 " Reduce extensions list for faster detection
 let g:vimania_uri_extensions = ['.md', '.txt']
 
-" Disable unnecessary features
-let g:vimania_uri_twbm_integration = 0
 ```
 
 ### Debug Mode

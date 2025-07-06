@@ -7,7 +7,6 @@ from pprint import pprint
 from typing import Dict, Tuple
 
 from vimania_uri_ import md
-from vimania_uri_.bms.handler import delete_twbm
 from vimania_uri_.exception import VimaniaException
 from vimania_uri_.pattern import URL_PATTERN
 from vimania_uri_.vim_ import vim_helper
@@ -76,14 +75,12 @@ def warn_to_scratch_buffer(func):
 
 class VimaniaUriManager:
     def __init__(
-            self,
-            *,
-            extensions=None,
-            twbm_integrated=False,
-            plugin_root_dir=None,
+        self,
+        *,
+        extensions=None,
+        plugin_root_dir=None,
     ):
         self.extensions = extensions
-        self.twbm_integrated = twbm_integrated
         self.plugin_root_dir = plugin_root_dir
         _log.debug(f"{extensions=}, {plugin_root_dir=}")
 
@@ -108,9 +105,8 @@ class VimaniaUriManager:
 
     @err_to_scratch_buffer
     @warn_to_scratch_buffer
-    def call_handle_md2(self, save_twbm: str):
+    def call_handle_md2(self):
         return_message = ""
-        _log.debug(f"{save_twbm=}")
 
         row, col = vim.current.window.cursor
         cursor = (row - 1, col)
@@ -126,8 +122,6 @@ class VimaniaUriManager:
         action = md.open_uri(
             target,
             open_in_vim_extensions=self.extensions,
-            save_twbm=False if int(save_twbm) == 0 else True,
-            twbm_integrated=self.twbm_integrated,
             current_file=current_file,
         )
         action()
@@ -143,31 +137,11 @@ class VimaniaUriManager:
         # add line at end of buffer
         current.buffer[-1:0] = ["New line at end."]
 
-    # https://github.com/vim/vim/issues/6017: cannot create error buffer
-    # @err_to_scratch_buffer
-    # @warn_to_scratch_buffer
-    def delete_twbm(self, args: str):
-        """removes bookmark from twbm via 'dd' mapping"""
-        _log.debug(f"{args=}")
-        if not self.twbm_integrated:
-            _log.debug(f"twbm not integrated. Do nothing.")
-            return
-        assert isinstance(args, str), f"Error: input must be string, got {type(args)}."
-        try:
-            urls = delete_twbm(args)
-        except VimaniaException as e:
-            vim.command(
-                f"echohl WarningMsg | echom 'Cannot extract url from: {args}' | echohl None"
-            )
-            return
-        for url in urls:
-            vim.command(f"echom 'deleted twbm: {url[0]} {url[1]}'")
-
     @staticmethod
     @err_to_scratch_buffer
     def throw_error(args: str, path: str):
         _log.debug(f"{args=}, {path=}")
-        raise Exception(f"Exception Test")
+        raise Exception("Exception Test")
 
     @staticmethod
     @err_to_scratch_buffer
@@ -205,5 +179,5 @@ class VimaniaUriManager:
             vim.command(f"let g:vimania_url_title = '{str(title)}'")
         except Exception as e:
             _log.warning(f"Invalid URL: {url=}, {e=}")
-            vim.command(f"let g:vimania_url_title = 'UNKNOWN_URL_TITLE'")
+            vim.command("let g:vimania_url_title = 'UNKNOWN_URL_TITLE'")
             # vim.command(f"echom 'Invalid URL: {url=}'")

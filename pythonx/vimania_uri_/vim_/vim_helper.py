@@ -2,9 +2,10 @@
 # encoding: utf-8
 
 """Wrapper functionality around the functions we need from Vim."""
+
 import logging
 from contextlib import contextmanager
-from typing import Any, Generator, List, Union
+from typing import Any, Generator, Union
 
 log = logging.getLogger("vimania-uri_.vim_.vim_helper")
 
@@ -24,7 +25,6 @@ from vimania_uri_.vim_.compatibility import byte2col, col2byte
 
 
 class VimBuffer:
-
     """Wrapper around the current Vim buffer."""
 
     def __getitem__(self, idx):
@@ -106,16 +106,12 @@ def escape(inp: Union[str, dict, list]) -> str:
         elif isinstance(obj, dict):
             rv = (
                 "{"
-                + ",".join(
-                    [
-                        f"{conv(key)}:{conv(value)}"
-                        for key, value in obj.items()
-                    ]
-                )
+                + ",".join([f"{conv(key)}:{conv(value)}" for key, value in obj.items()])
                 + "}"
             )
         else:
-            rv = f'"{str(obj).replace('"', '\\"')}"'
+            escaped_str = str(obj).replace('"', '\\"')
+            rv = f'"{escaped_str}"'
         return rv
 
     return conv(inp)
@@ -219,8 +215,6 @@ def select(start, end):
             move_cmd += "%iG%i|" % virtual_position(end.line + 1, end.col + 1)
         move_cmd += "o%iG%i|o\\<c-g>" % virtual_position(start.line + 1, start.col + 1)
     feedkeys(move_cmd)
-
-
 
 
 def set_mark_from_pos(name, pos):

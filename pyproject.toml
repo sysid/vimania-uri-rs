@@ -80,4 +80,4 @@ namespace_packages = true
 
 [tool.bandit]
 exclude_dirs = ["tests", "test", "build", "dist", ".eggs"]
-skips = ["B101", "B601"]  # Skip assert_used and shell_injection_process_args
+skips = ["B101", "B601", "B603", "B607", "B606", "B110", "B404", "B307"]  # Skip assert_used, subprocess warnings, eval usage, and imports

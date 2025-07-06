@@ -296,7 +296,6 @@ let g:vimania_uri_extensions = ['.md', '.txt']
 
 " New variable names (recommended)
 let g:vimania_uri_extensions = ['.md', '.txt', '.py']
-let g:vimania_uri_twbm_integration = 1
 ```
 
 #### Feature Compatibility

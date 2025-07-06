@@ -3,8 +3,8 @@
 
 """This file contains compatibility code to stay compatible with as many python
 versions as possible."""
+
 import logging
-from typing import Union
 
 log = logging.getLogger("vimania-uri_.compatibility")
 

@@ -11,20 +11,20 @@ _log = logging.getLogger("vimania-uri_.helper.get_fqp")
 def get_fqp(args: str) -> Tuple[str, str]:
     p = Path.home()  # default setting
     if args.startswith("http"):
-        _log.debug(f"Http Link")
+        _log.debug("Http Link")
         p = args
     # next elif needed to group all possible pathes
     elif (
         args[0] in "/.~$0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     ):
         if args.startswith("/"):
-            _log.debug(f"Absolute path.")
+            _log.debug("Absolute path.")
             p = Path(args)
         elif args.startswith("~"):
-            _log.debug(f"Path with prefix tilde.")
+            _log.debug("Path with prefix tilde.")
             p = Path(args).expanduser().absolute()
         elif args.startswith("$"):
-            _log.debug(f"Path with environment prefix.")
+            _log.debug("Path with environment prefix.")
             p = Path(args)
             env_path = os.getenv(p.parts[0].strip("$"), None)
             if env_path is None:

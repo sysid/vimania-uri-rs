@@ -33,8 +33,6 @@ TwDebug "Vimania-Uri PythonScript: " . g:vimania#PythonScript
 let g:vimania_uri_extensions = get(g:, "vimania_uri_extensions", ['.md','.txt','.rst','.py','.conf','.sh','.json','.yaml','.yml'])
 TwDebug "Vimania-Uri Extensions: " . join(g:vimania_uri_extensions, ", ")
 
-let g:vimania_uri_twbm_integration = get(g:, "vimania_uri_twbm_integration", 0)
-TwDebug "Vimania-Uri twbm integration: " . g:vimania_uri_twbm_integration
 
 let g:vimania_uri_rs_default_vim_split_policy = get(g:, "vimania_uri_rs_default_vim_split_policy", "none")
 let s:is_vimania_uri_rs_engine_loaded = 0
@@ -51,12 +49,11 @@ TwDebug "elapsed time:" . reltimestr(reltime(start_time))
 
 " Functions {{{ "
 " ============================================================================
-function! s:HandleMd(save_twbm)
-  python3 xUriMgr.call_handle_md2(vim.eval('a:save_twbm'))
+function! s:HandleMd()
+  python3 xUriMgr.call_handle_md2()
   redraw!
 endfunction
-command! HandleMd :call <sid>HandleMd(0)
-command! HandleMdSave :call <sid>HandleMd(1)
+command! HandleMd :call <sid>HandleMd()
 
 function! GetURLTitle(url)
   call TwDebug(printf("Vimania args: %s", a:url))
@@ -86,22 +83,6 @@ endfunction
 command! -nargs=0 VimaniaThrowError call VimaniaThrowError()
 "noremap Q :VimaniaDebug<CR>
 
-function! VimaniaDeleteTwbm(args)
-  call TwDebug(printf("Vimania args: %s", a:args))
-
-  " Check if vimania URI twbm integration is enabled
-  if exists('g:vimania_uri_twbm_integration') && g:vimania_uri_twbm_integration == 1
-    " Prompt the user for confirmation
-    let l:confirmation = input("Delete also from bkmr database? (y/n): ")
-    if l:confirmation ==? 'y'
-      python3 xUriMgr.delete_twbm(vim.eval('a:args'))
-      echo "Bookmark deleted."
-    else
-      echo "Bookmark not deleted from bkmr."
-    endif
-  endif
-endfunction
-command! -nargs=1 VimaniaDeleteTwbm call VimaniaDeleteTwbm(<f-args>)
 "noremap Q :VimaniaDeleteTodo - [ ] todo vimania<CR>
 
 function s:PasteMDLink()
@@ -132,10 +113,6 @@ if !hasmapto('<Plug>HandleMd', 'n')
     nmap go <Plug>(HandleMd)
 endif
 
-nnoremap <unique> <script> <Plug>(HandleMdSave) <Cmd>HandleMdSave<CR>
-if !hasmapto('<Plug>HandleMdSave', 'n')
-    nmap goo <Plug>(HandleMdSave)
-endif
 
 noremap <unique> <script> <Plug>(UriPasteMDLink) <SID>PasteMDLink
 if !hasmapto('<Plug>UriPasteMDLink', 'n')
@@ -148,14 +125,6 @@ nnoremap <Plug>(VimaniaUriFindLinkPrev) :VimaniaUriFindLinkPrev<CR>
 
 " augroup {{{ "
 " ============================================================================
-augroup Vimania-Uri
- autocmd!
-" removes URL (pattern) from twbm
- autocmd TextYankPost *.md
-    \ if len(v:event['regcontents']) == 1 && v:event['regcontents'][0] =~? 'http[s]\=://' && v:event['operator'] == 'd' && ! v:event['visual']
-    \ | call VimaniaDeleteTwbm(v:event['regcontents'][0])
-    \ | endif
-augroup END
 " }}} augroup "
 
 " helper commands {{{ "

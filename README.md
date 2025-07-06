@@ -9,7 +9,7 @@
 
 > **Background**: [Rewriting a Vim Plugin in Rust](https://sysid.github.io/rewriting-a-vim-plugin-in-rust-vimania-uri-rs/)
 
-A high-performance Rust reimplementation of the [vimania-uri](https://github.com/sysid/vimania-uri) Vim plugin, delivering **10x faster startup times** and seamless [bkmr](https://github.com/sysid/bkmr) bookmark manager integration.
+A high-performance Rust reimplementation of the [vimania-uri](https://github.com/sysid/vimania-uri) Vim plugin, delivering **10x faster startup times** with advanced URI handling capabilities.
 
 ## ✨ Key Features
 
@@ -17,7 +17,6 @@ A high-performance Rust reimplementation of the [vimania-uri](https://github.com
 - 🔗 **Universal URI Support**: Handle web URLs, local files, internal links, and more
 - 📝 **Smart Markdown Integration**: Auto-fetch page titles for reference-style links
 - 🎯 **Precise Navigation**: Jump to specific headings, line numbers, or anchors
-- 📚 **Bookmark Integration**: Seamless integration with [bkmr](https://github.com/sysid/bkmr) CLI bookmark manager
 - 🛡️ **Security First**: Built-in SSRF protection and comprehensive security auditing
 - 🔧 **Extensive Format Support**: Open HTML, DOCX, PPTX, images, audio, and more
 - 💎 **Modern Architecture**: Rust core with Python integration for optimal performance
@@ -28,7 +27,6 @@ While Vim's native `gx` command and existing plugins provide basic URI handling,
 - **Performance**: Slow startup times and laggy URL processing
 - **Features**: Limited format support and navigation capabilities  
 - **Security**: No protection against malicious URLs
-- **Integration**: Poor bookmark manager integration
 
 vimania-uri-rs addresses all these limitations with a modern, high-performance solution.
 
@@ -126,8 +124,6 @@ The following links will be handled (the possible cursor positions are indicated
 " File extensions to open in Vim (others use OS default)
 let g:vimania_uri_extensions = ['.md', '.txt', '.rst', '.py', '.conf', '.sh', '.json', '.yaml', '.yml']
 
-" Enable bookmark manager integration (requires bkmr)
-let g:vimania_uri_twbm_integration = 0  " Set to 1 if bkmr is installed
 
 " Custom key mapping (default: 'go')
 nmap <leader>u <Plug>vimania_uri_go
@@ -148,7 +144,6 @@ let g:vimania_uri_browser_cmd = 'firefox'
 
 ### Environment Variables
 
-- `BKMR_DB_URL`: Database URL for bkmr integration
 - `LOG_LEVEL`: Override log level (DEBUG, INFO, WARNING, ERROR)
 - `VIMANIA_URI_TIMEOUT`: Request timeout in seconds
 ---
@@ -171,7 +166,6 @@ Plug 'https://github.com/sysid/vimania-uri-rs.git', {
 
 " Configuration
 let g:vimania_uri_extensions = ['.md', '.txt', '.rst', '.py', '.json', '.yaml']
-let g:vimania_uri_twbm_integration = 1  " Enable bkmr integration (requires bkmr)
 ```
 
 ### Method 2: Build from Source

@@ -17,11 +17,8 @@ import pytest
         ("[testuri](vm::http://www.test.org)adf", "http://www.test.org"),
     ),
 )
-def test_delete_twbm_regexp(mocker, line, result):
-    # https://regex101.com/r/W9Epg0/1
-    # https://regex101.com/delete/gn3L5TNGXye9ajzZf5szoY5G
-    # spy = mocker.patch("vimania.core.BukuDb")
-    # delete_twbm(line)
+def test_url_pattern_extraction(mocker, line, result):
+    # Test URL pattern extraction functionality
     assert (
         re.compile(
             r""".*(https?:\/\/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b[-a-zA-Z0-9@:%_\+.~#?&\/=]*)"""
