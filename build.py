@@ -21,8 +21,11 @@ def parse_arguments() -> argparse.Namespace:
 def ensure_cargo_installed() -> None:
     """Ensure that Cargo (Rust's package manager) is installed."""
     try:
-        subprocess.run(["cargo", "--version"], check=True)
+        subprocess.run(["cargo", "--version"], check=True, capture_output=True)
     except subprocess.CalledProcessError:
+        print("Cargo (Rust) is not installed.")
+        sys.exit(1)
+    except FileNotFoundError:
         print("Cargo (Rust) is not installed.")
         sys.exit(1)
 
@@ -31,34 +34,25 @@ def build_rust_extension(python_executable: str, is_dev: bool) -> None:
     """Build the Rust extension using maturin."""
     print(f"Building Rust extension in {'release' if not is_dev else 'development'} mode.")
 
-    if is_dev:
-        result = subprocess.run([
-            "maturin", "build",
-            "--bindings", "pyo3",
-            "--interpreter", python_executable,
-        ])
-    else:
-        result = subprocess.run([
-            "maturin", "build",
-            "--release",
-            "--bindings", "pyo3",
-            "--interpreter", python_executable,
-        ])
-
-    if result.returncode != 0:
-        print("Failed to build the Rust extension.")
+    try:
+        if is_dev:
+            subprocess.run([
+                "maturin", "build",
+                "--bindings", "pyo3",
+                "--interpreter", python_executable,
+            ], check=True)
+        else:
+            subprocess.run([
+                "maturin", "build",
+                "--release",
+                "--bindings", "pyo3",
+                "--interpreter", python_executable,
+            ], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to build the Rust extension: {e}")
         sys.exit(1)
 
 
-# def find_wheel_file(wheels_dir: str) -> str:
-#     """Locate the generated wheel file."""
-#     wheel_files = glob.glob(os.path.join(wheels_dir, "*.whl"))
-#
-#     if not wheel_files:
-#         print("No wheel file found. Something went wrong with the build.")
-#         sys.exit(1)
-#
-#     return wheel_files[0]
 
 def find_wheel_file(wheels_dir: str) -> str:
     """Locate the generated wheel file for the current Python version."""
@@ -80,16 +74,16 @@ def install_wheel(wheel_file: str, target_dir: str, python_executable: str) -> N
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
 
-    result = subprocess.run([
-        python_executable, "-m", "pip", "install",
-        "--target", target_dir,
-        "--force-reinstall",  # Ensure the wheel is installed even if it's already present
-        "--upgrade",
-        wheel_file,
-    ])
-
-    if result.returncode != 0:
-        print(f"Failed to install the wheel file into the {target_dir} directory.")
+    try:
+        subprocess.run([
+            python_executable, "-m", "pip", "install",
+            "--target", target_dir,
+            "--force-reinstall",  # Ensure the wheel is installed even if it's already present
+            "--upgrade",
+            wheel_file,
+        ], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install the wheel file into the {target_dir} directory: {e}")
         sys.exit(1)
 
     print(f"Successfully installed {wheel_file} into {target_dir}")
@@ -100,16 +94,16 @@ def install_python_dependencies(requirements_file: str, target_dir: str, python_
     if os.path.exists(requirements_file):
         print(f"Installing dependencies from {requirements_file} into {target_dir}")
 
-        result = subprocess.run([
-            python_executable, "-m", "pip", "install",
-            "--target", target_dir,
-            "-r", requirements_file,
-            "--force-reinstall",  # Ensure the wheel is installed even if it's already present
-            "--upgrade",
-        ])
-
-        if result.returncode != 0:
-            print(f"Failed to install dependencies from {requirements_file}.")
+        try:
+            subprocess.run([
+                python_executable, "-m", "pip", "install",
+                "--target", target_dir,
+                "-r", requirements_file,
+                "--force-reinstall",  # Ensure the wheel is installed even if it's already present
+                "--upgrade",
+            ], check=True)
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to install dependencies from {requirements_file}: {e}")
             sys.exit(1)
     else:
         print(f"No requirements.txt found at {requirements_file}. Skipping dependency installation.")

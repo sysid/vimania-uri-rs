@@ -2,7 +2,7 @@
 name = "vimania_uri_rs"
 version = "1.1.7"
 license = "BSD-3-Clause"
-description = "Add your description here"
+description = "Advanced URI handling for Vim with Rust performance"
 authors = [
     { name = "sysid", email = "sysid@gmx.de" }
 ]
@@ -19,9 +19,6 @@ homepage = "https://github.com/sysid/vimania-uri-rs"
 [project.urls]
 Source = "https://github.com/sysid/vimania-uri-rs"
 
-#[build-system]
-#requires = ["hatchling"]
-#build-backend = "hatchling.build"
 [build-system]
 requires = ["maturin>=1,<2"]
 build-backend = "maturin"
@@ -29,20 +26,17 @@ build-backend = "maturin"
 [tool.uv]
 managed = true
 dev-dependencies = [
+    "bandit[toml]>=1.7.10",
     "isort>=5.13.2",
     "maturin-import-hook>=0.1.0",
     "mypy>=1.14.0",
     "pip>=24.3.1",
+    "pre-commit>=4.0.1",
     "pytest>=8.3.4",
     "pytest-mock>=3.14.0",
     "ruff>=0.8.4",
 ]
 
-[tool.hatch.metadata]
-allow-direct-references = true
-
-[tool.hatch.build.targets.wheel]
-packages = ["py"]
 
 [tool.bumpversion]
 current_version = "1.1.7"
@@ -80,3 +74,7 @@ line_length = 88
 [tool.mypy]
 ignore_missing_imports = false
 namespace_packages = true
+
+[tool.bandit]
+exclude_dirs = ["tests", "test", "build", "dist", ".eggs"]
+skips = ["B101", "B601", "B603", "B607", "B606", "B110", "B404", "B307"]  # Skip assert_used, subprocess warnings, eval usage, and imports

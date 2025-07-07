@@ -10,10 +10,12 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, NewType, Optional, Tuple
 
-from vimania_uri_.bms.handler import add_twbm
-from vimania_uri_.environment import config
-from vimania_uri_.exception import VimaniaException
-from vimania_uri_.pattern import URL_PATTERN, MD_LINK_PATTERN, LINK_PATTERN, REFERENCE_DEFINITION_PATTERN
+from vimania_uri_.pattern import (
+    URL_PATTERN,
+    MD_LINK_PATTERN,
+    LINK_PATTERN,
+    REFERENCE_DEFINITION_PATTERN,
+)
 
 try:
     from urllib.parse import urlparse
@@ -76,11 +78,9 @@ def parse_uri(uri: URI) -> ParsedPath:
 
 
 def open_uri(
-        target: URI,
-        open_in_vim_extensions: set = None,
-        save_twbm=False,
-        twbm_integrated=False,
-        current_file: str | None = None,
+    target: URI,
+    open_in_vim_extensions: set = None,
+    current_file: str | None = None,
 ) -> Callable:
     """
     :returns: a callable that encapsulates the action to perform
@@ -98,21 +98,6 @@ def open_uri(
     if target.startswith("#"):
         return JumpToAnchor(target)
 
-    # TODO: better error handling
-    if twbm_integrated and save_twbm:
-        if not config.is_installed_twbm:
-            _log.error(
-                f"Environment variable BKMR_DB_URL not set. Required for twbm integration"
-            )
-            # return lambda: None
-            raise VimaniaException(
-                f"Environment variable TWBM_DB_URL not set. Required for twbm integration"
-            )
-        retcode = add_twbm(str(target), current_file)
-        if retcode == 0:
-            return_message = f"new added twbm url: {retcode=}"
-            _log.info(f"twbm added: {retcode}")
-
     if has_scheme(target):
         _log.debug(f"has scheme -> open in browser: {target=}")
         return BrowserOpen(target)
@@ -122,10 +107,10 @@ def open_uri(
         return OSOpen(target)
 
     if target.startswith("|filename|"):
-        target = target[len("|filename|"):]
+        target = target[len("|filename|") :]
 
     if target.startswith("{filename}"):
-        target = target[len("{filename}"):]
+        target = target[len("{filename}") :]
 
     return VimOpen(target)
 
@@ -230,7 +215,7 @@ class JumpToAnchor(Action):
         needle = cls.norm_target(target)
         _log.debug(f"{target=}, {needle=}, {buffer=}")
 
-        for (idx, line) in enumerate(buffer):
+        for idx, line in enumerate(buffer):
             m = cls.HEADING_PATTERN.match(line)
             if m is not None:
                 title = m.group("title")
@@ -291,10 +276,16 @@ def check_path(line: str, pos: int) -> Tuple[str | None, int]:
     if end < 0:
         end = len(line)
 
-    path = line[start: start + end]
+    path = line[start : start + end]
     try:
         p = Path(path)
-        if any([c for c in ["*", "?", "[", "]", "|", "\"", "'", "<", ">", "!"] if c in str(p)]):
+        if any(
+            [
+                c
+                for c in ["*", "?", "[", "]", "|", '"', "'", "<", ">", "!"]
+                if c in str(p)
+            ]
+        ):
             raise ValueError(f"Skipping {p} because it contains an invalid character.")
         return path, pos - start
     except ValueError:

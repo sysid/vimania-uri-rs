@@ -5,6 +5,7 @@ from enum import Enum
 
 log = logging.getLogger("vimania-uri_.helper.position")
 
+
 class JumpDirection(Enum):
     FORWARD = 1
     BACKWARD = 2

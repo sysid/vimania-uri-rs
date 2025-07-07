@@ -82,8 +82,12 @@ class MatchEnum(IntEnum):
     TAGS = 8  # {t:todo,py}
 
 
-URL_PATTERN = re.compile(r'((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)', re.DOTALL)
-MD_LINK_PATTERN = re.compile(r'\[([^\]]+)\]\(([^\)]+)\)', re.DOTALL)  # not used currently but tested
+URL_PATTERN = re.compile(
+    r"((https?):((//)|(\\\\))+([\w\d:#@%/;$()~_?\+-=\\\.&](#!)?)*)", re.DOTALL
+)
+MD_LINK_PATTERN = re.compile(
+    r"\[([^\]]+)\]\(([^\)]+)\)", re.DOTALL
+)  # not used currently but tested
 LINK_PATTERN = re.compile(
     r"""
     ^

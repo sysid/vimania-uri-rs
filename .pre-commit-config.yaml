@@ -1,34 +1,58 @@
 fail_fast: true
 repos:
-- repo: https://github.com/astral-sh/ruff-pre-commit
-  rev: v0.6.2
-  hooks:
-    - id: ruff
-      args: [ --fix ]
-    - id: ruff-format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+      - id: debug-statements
 
-- repo: local
-  hooks:
-    - id: mypy
-      name: mypy
-      stages: [commit]
-      language: system
-      entry: make mypy
-      types: [python]
-      require_serial: true
-      pass_filenames: false
-    - id: pytest
-      name: pytest
-      stages: [commit]
-      language: system
-      entry: make test
-      types: [python]
-      pass_filenames: false
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
 
-- repo: https://github.com/astral-sh/uv-pre-commit
-  # uv version.
-  rev: 0.3.2
-  hooks:
-    # Run the pip compile
-    - id: pip-compile
-      args: [pyproject.toml, -o, requirements.txt]
+  - repo: local
+    hooks:
+      - id: mypy
+        name: mypy
+        stages: [pre-commit]
+        language: system
+        entry: make mypy
+        types: [python]
+        require_serial: true
+        pass_filenames: false
+      - id: rust-fmt
+        name: rust-fmt
+        stages: [pre-commit]
+        language: system
+        entry: cargo fmt --check
+        types: [rust]
+        pass_filenames: false
+      - id: rust-clippy
+        name: rust-clippy
+        stages: [pre-commit]
+        language: system
+        entry: cargo clippy -- -D warnings
+        types: [rust]
+        pass_filenames: false
+      - id: pytest
+        name: pytest
+        stages: [pre-commit]
+        language: system
+        entry: make test
+        types: [python]
+        pass_filenames: false
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.10
+    hooks:
+      - id: bandit
+        args: [-c, pyproject.toml]
+        additional_dependencies: ["bandit[toml]"]

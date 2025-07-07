@@ -40,7 +40,17 @@ if "VIRTUAL_ENV" in os.environ:
     _log.debug(f"Running in VENV: {os.environ['VIRTUAL_ENV']}")
     project_base_dir = os.environ["VIRTUAL_ENV"]
     activate_this = os.path.join(project_base_dir, "bin/activate_this.py")
-    exec(open(activate_this).read(), {"__file__": activate_this})
+    
+    # Check if activate_this.py exists before trying to execute it
+    if os.path.exists(activate_this):
+        try:
+            exec(open(activate_this).read(), {"__file__": activate_this})
+            _log.debug(f"Successfully activated virtual environment: {project_base_dir}")
+        except Exception as e:
+            _log.warning(f"Failed to activate virtual environment {project_base_dir}: {e}")
+    else:
+        _log.debug(f"activate_this.py not found at {activate_this}, skipping virtual environment activation")
+        _log.debug("Modern virtual environments don't require activate_this.py for plugin operation")
 
 _log.debug(
     "------------------------------ Begin Python Init -------------------------------"
@@ -59,18 +69,11 @@ if int(vim.eval("exists('g:vimania_uri_extensions')")):
 else:
     extensions = None
 
-if int(vim.eval("exists('g:vimania_uri_twbm_integration')")):
-    twbm_integrated = vim.eval("g:vimania_uri_twbm_integration")
-    twbm_integrated = True if int(twbm_integrated) == 1 else False
-else:
-    twbm_integrated = False
-
-_log.debug(f"{extensions=}, {twbm_integrated=}")
+_log.debug(f"{extensions=}")
 
 xUriMgr = VimaniaUriManager(
     plugin_root_dir=plugin_root_dir,
     extensions=extensions,
-    twbm_integrated=twbm_integrated,
 )
 
 _log.debug(

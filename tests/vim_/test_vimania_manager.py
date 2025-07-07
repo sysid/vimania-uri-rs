@@ -61,7 +61,6 @@ class TestVimaniaUriManager:
 
         vm = module_under_test.VimaniaUriManager(
             extensions=["vimwiki", "markdown", "pdf", "png", "jpg", "jpeg", "gif"],
-            twbm_integrated=False,
             plugin_root_dir=None,
         )
         vm.call_handle_md2(save_twbm="1")
@@ -78,7 +77,6 @@ class TestVimaniaUriManager:
 
         vm = module_under_test.VimaniaUriManager(
             extensions=["vimwiki", "markdown", "pdf", "png", "jpg", "jpeg", "gif"],
-            twbm_integrated=False,
             plugin_root_dir=None,
         )
         vm.get_url_title("https://www.google.com")
