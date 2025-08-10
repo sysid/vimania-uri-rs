@@ -108,15 +108,15 @@ command! VimaniaUriFindLinkPrev :call s:_vimania_uri_rs_find_prev_link()
 
 " Mappings {{{ "
 " ============================================================================
-nnoremap  <unique> <script> <Plug>(HandleMd) <Cmd>HandleMd<CR>
+nnoremap <script> <Plug>(HandleMd) <Cmd>HandleMd<CR>
 if !hasmapto('<Plug>HandleMd', 'n')
     nmap go <Plug>(HandleMd)
 endif
 
 
-noremap <unique> <script> <Plug>(UriPasteMDLink) <SID>PasteMDLink
+noremap <script> <Plug>(UriPasteMDLink) <SID>PasteMDLink
 if !hasmapto('<Plug>UriPasteMDLink', 'n')
-    nmap <unique> <Leader>vl <Plug>(UriPasteMDLink)
+    nmap <Leader>vl <Plug>(UriPasteMDLink)
 endif
 
 nnoremap <Plug>(VimaniaUriFindLinkNext) :VimaniaUriFindLinkNext<CR>
