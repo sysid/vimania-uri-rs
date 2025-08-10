@@ -11,17 +11,17 @@
 
 A high-performance Rust reimplementation of the [vimania-uri](https://github.com/sysid/vimania-uri) Vim plugin, delivering **10x faster startup times** with advanced URI handling capabilities.
 
-## ✨ Key Features
+## Key Features
 
-- 🚀 **Lightning Fast**: 10x faster startup than pure Python implementations
-- 🔗 **Universal URI Support**: Handle web URLs, local files, internal links, and more
-- 📝 **Smart Markdown Integration**: Auto-fetch page titles for reference-style links
-- 🎯 **Precise Navigation**: Jump to specific headings, line numbers, or anchors
-- 🛡️ **Security First**: Built-in SSRF protection and comprehensive security auditing
-- 🔧 **Extensive Format Support**: Open HTML, DOCX, PPTX, images, audio, and more
-- 💎 **Modern Architecture**: Rust core with Python integration for optimal performance
+- **Lightning Fast**: 10x faster startup than pure Python implementations
+- **Universal URI Support**: Handle web URLs, local files, internal links, and more
+- **Smart Markdown Integration**: Auto-fetch page titles for reference-style links
+- **Precise Navigation**: Jump to specific headings, line numbers, or anchors
+- **Security First**: Built-in SSRF protection and comprehensive security auditing
+- **Extensive Format Support**: Open HTML, DOCX, PPTX, images, audio, and more
+- **Modern Architecture**: Rust core with Python integration for optimal performance
 
-## 🎯 Why vimania-uri-rs?
+## Why vimania-uri-rs?
 
 While Vim's native `gx` command and existing plugins provide basic URI handling, they often fall short in terms of:
 - **Performance**: Slow startup times and laggy URL processing
@@ -30,7 +30,7 @@ While Vim's native `gx` command and existing plugins provide basic URI handling,
 
 vimania-uri-rs addresses all these limitations with a modern, high-performance solution.
 
-### 📹 Demo
+### Demo
 
 ![Demo](vimania-uri-rs-demo.png)
 
@@ -38,7 +38,7 @@ vimania-uri-rs addresses all these limitations with a modern, high-performance s
 
 **Best paired with**: [vim-markdown](https://github.com/preservim/vim-markdown), but works excellently with any file type.
 
-## 🚀 Quick Start
+## Quick Start
 
 **It's simple**: Position your cursor on any URI and press `go`.
 
