@@ -1,3 +1,5 @@
+.direnv/
+tags
 doc/~*
 .idea/runConfigurations/_template__of_py_test*
 pythonx/*
