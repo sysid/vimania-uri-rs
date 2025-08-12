@@ -1,6 +1,6 @@
 [project]
 name = "vimania_uri_rs"
-version = "2.0.2"
+version = "2.0.3"
 license = "BSD-3-Clause"
 description = "Advanced URI handling for Vim with Rust performance"
 authors = [
@@ -39,7 +39,7 @@ dev-dependencies = [
 
 
 [tool.bumpversion]
-current_version = "2.0.2"
+current_version = "2.0.3"
 commit = true
 tag = false
 message = "Bump version to {new_version}"
