@@ -1,5 +1,5 @@
-use pyo3_build_config;
+use pyo3_build_config::add_extension_module_link_args;
 
 fn main() {
-    pyo3_build_config::add_extension_module_link_args();
+    add_extension_module_link_args();
 }

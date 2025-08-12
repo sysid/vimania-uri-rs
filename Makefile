@@ -18,12 +18,6 @@ tests_src = $(app_root)/tests
 # Makefile directory
 CODE_DIR := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-.PHONY: all
-all: clean build upload tag  ## Build and upload
-	@echo "--------------------------------------------------------------------------------"
-	@echo "-M- building and distributing"
-	@echo "--------------------------------------------------------------------------------"
-
 ################################################################################
 # Developing \
 DEVELOPING:  ## ###############################################################
@@ -148,15 +142,6 @@ create-release: check-github-token  ## create a release on GitHub via the gh cli
 		gh release create "v$(VERSION)" --generate-notes --latest; \
 	fi
 
-.PHONY: create-release
-create-release:  ## create a release on GitHub via the gh cli
-	@if command -v gh version &>/dev/null; then \
-		echo "Creating GitHub release for v$(VERSION)"; \
-		gh release create "v$(VERSION)" --generate-notes; \
-	else \
-		echo "You do not have the github-cli installed. Please create release from the repo manually."; \
-		exit 1; \
-	fi
 
 .PHONY: check-github-token
 check-github-token:  ## Check if GITHUB_TOKEN is set
