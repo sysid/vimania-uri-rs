@@ -1,3 +1,5 @@
+### Replaced by [vimania-lua](https://github.com/sysid/vimania-lua)
+
 # vimania-uri-rs
 
 **Advanced URI Handling for the Modern Vim User**
